@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * Creates additional attachment from the raw enlosure.
+ * Also if enclosures has a file in PDF, PDF->HTML conversion is scheduled.
+ * @access protected
+ *
+ * @param array $enclosure  raw information about the enclosure
+ * @param mixed $file       file object to be attached to the attachment
+ *
+ * @return int  $nid        node id of the created attachment
+ */
+function os2dagsorden_esdh_provider_process_enclosure($enclosure, $file){
+  //creating attachment content
+  $node = new stdClass();
+  $node->type = "os2web_meetings_bullet_attach";
+  $node->language = LANGUAGE_NONE;
+
+  node_object_prepare($node);
+
+  $node->title = 'Bilag: ' . $enclosure['title'];
+  if ($node->title > 254)
+    $node->title = substr($node->title, 0, 254);
+    
+  $node->field_os2web_meetings_bpa_file[$node->language][] = (array) $file;
+  if ($enclosure['access'] === 'False')//TODO: Look here
+    $node->field_os2web_meetings_bpa_closed[$node->language][0]['value'] = 1;
+  else
+    $node->field_os2web_meetings_bpa_closed[$node->language][0]['value'] = 0;
+
+  node_submit($node);
+  node_save($node);
+
+  //PDF conversion
+  if (module_exists(os2dagsorden_pdf2htmlex)){
+    if (file_get_mimetype($file->uri) === 'application/pdf')//if is PDF, schedule for HTML conversion
+      os2dagsorden_pdf2htmlex_schedule($file->fid, $node->nid);
+  }
+  
+  return $node->nid;
+}
+
+/**
+ * Adds the subid to the committee term, if this subid has not been added there before.
+ * @access protected
+ *
+ * @param term Object $committee_term committee term object
+ * @param int         $sub_id         subid to be added
+ *
+ * @return none
+ */
+function os2dagsorden_esdh_provider_committee_add_subid($committee_term, $sub_id){
+  //check already has this subid
+  $contains = FALSE;
+  if (isset($committee_term->field_os2web_meetings_com_subid['und'])) {
+      foreach ($committee_term->field_os2web_meetings_com_subid['und'] as $id_raw) {
+          if (intval($id_raw['value']) == intval($sub_id)) {
+              $contains = TRUE;
+              break;
+          }
+      }
+  }
+  
+  //if does not have
+  if (!$contains) {
+    $committee_term->field_os2web_meetings_com_subid['und'][]['value'] = $sub_id;
+    taxonomy_term_save($committee_term);
+  }
+}
+
+/**
+ * Checks if there is a meeting analogue imported from SOFD system.
+ * @access protected
+ *
+ * @param term Object $committee      committee term object
+ * @param String      $meeting_start  start date of the meeting
+ * @param String      $meeting_finish end date of the meeting
+ *
+ * @return Object     $found_meeting  found meeting, if any, void otherwise
+ */
+function os2dagsorden_esdh_provider_find_sofd_meeting($committee, $meeting_start, $meeting_finish){
+  //getting meeting
+  $meeting_start_date_0000 = date('Y-m-d 00:00:00', strtotime($meeting_start));
+  $meeting_start_date_2359 = date('Y-m-d 23:59:59', strtotime($meeting_finish));
+
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+      ->propertyCondition('type', 'os2web_meetings_meeting')
+      ->fieldCondition('field_os2web_meetings_date', 'value', $meeting_start_date_0000, '>=')
+      ->fieldCondition('field_os2web_meetings_date', 'value', $meeting_start_date_2359, '<=')
+      //no meeting system ID's - avoiding overlapping meetings of same committee on the same date
+      ->fieldCondition('field_os2web_meetings_system_id', 'value', '0', '=')
+      ->fieldCondition('field_os2web_meetings_committee', 'tid', $committee->tid, '=');
+  $result = $query->execute();
+
+  if (isset($result['node'])) {
+      $found_meeting = node_load(array_shift($result['node'])->nid);
+      return $found_meeting;
+  }
+}
