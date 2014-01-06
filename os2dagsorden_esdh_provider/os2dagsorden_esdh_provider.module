@@ -98,3 +98,39 @@ function os2dagsorden_esdh_provider_find_sofd_meeting($committee, $meeting_start
       return $found_meeting;
   }
 }
+
+/**
+ * Processed the closed bullet point same way as the opened bullet point it processed (code is a bit simplified)
+ *
+ * @param node object $node the created bullet node
+ * @param array       $item raw bullet information
+ *
+ * @return Object     $node updated bullet node
+ */
+function os2dagsorden_esdh_provider_process_closed_bullet($node, $item){
+  $node->field_os2web_meetings_bul_closed[LANGUAGE_NONE][]['value'] = 0;
+
+  // Gather the bullets for the item.
+  if (isset($item['bullets']) && is_array($item['bullets'])) {
+    $bullet_nids = _os2web_esdh_provider_import_bullets($item['bullets']);
+    foreach ($bullet_nids as $nid) {
+      $node->field_os2web_meetings_attach[LANGUAGE_NONE][]['target_id'] = $nid;
+    }
+  }
+  else {
+    $node->field_os2web_meetings_attach[LANGUAGE_NONE] = array();
+  }
+
+  // Gather enclosures.
+  foreach ($item['enclosures'] as $enclosure) {
+    if ($enclosure['access']) {
+      if ($file = _os2web_esdh_provider_import_file($enclosure)) {
+        $node->field_os2web_meetings_enclosures[LANGUAGE_NONE][] = (array) $file;
+        $node->field_os2web_meetings_attach[LANGUAGE_NONE][]['target_id'] = os2dagsorden_esdh_provider_process_enclosure($enclosure, $file);
+      }
+      else {
+        watchdog('acadre MM', 'There was an error importing file %uri ', array('%uri' => $enclosure['uri']), WATCHDOG_ERROR);
+      }
+    }
+  }
+}
