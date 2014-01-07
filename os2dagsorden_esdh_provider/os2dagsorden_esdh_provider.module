@@ -135,3 +135,16 @@ function os2dagsorden_esdh_provider_process_closed_bullet($node, $item){
   }
   return $node;
 }
+
+/**
+ * Adds a number to the bullet point
+ *
+ * @param node object $node   bullet point
+ * @param int         $number the number to add
+ *
+ * @return Object     $node   updated bullet point
+ */
+function os2dagsorden_esdh_provider_bullet_add_number($node, $number){
+  $node->field_os2web_meetings_bul_number[LANGUAGE_NONE][]['value'] = $number;
+  return $node;
+}
