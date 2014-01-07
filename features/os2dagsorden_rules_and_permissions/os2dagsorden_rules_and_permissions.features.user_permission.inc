@@ -22,9 +22,7 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
   // Exported permission: access administration pages.
   $permissions['access administration pages'] = array(
     'name' => 'access administration pages',
-    'roles' => array(
-      0 => 'os2dagsorden admin',
-    ),
+    'roles' => array(),
     'module' => 'system',
   );
 
@@ -107,9 +105,7 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
   // Exported permission: access toolbar.
   $permissions['access toolbar'] = array(
     'name' => 'access toolbar',
-    'roles' => array(
-      0 => 'os2dagsorden admin',
-    ),
+    'roles' => array(),
     'module' => 'toolbar',
   );
 
@@ -249,9 +245,7 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
   // Exported permission: administer os2web.
   $permissions['administer os2web'] = array(
     'name' => 'administer os2web',
-    'roles' => array(
-      0 => 'os2dagsorden admin',
-    ),
+    'roles' => array(),
     'module' => 'os2web_settings',
   );
 
@@ -328,9 +322,7 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
   // Exported permission: administer taxonomy.
   $permissions['administer taxonomy'] = array(
     'name' => 'administer taxonomy',
-    'roles' => array(
-      0 => 'os2dagsorden admin',
-    ),
+    'roles' => array(),
     'module' => 'taxonomy',
   );
 
@@ -358,9 +350,7 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
   // Exported permission: administer users.
   $permissions['administer users'] = array(
     'name' => 'administer users',
-    'roles' => array(
-      0 => 'os2dagsorden admin',
-    ),
+    'roles' => array(),
     'module' => 'user',
   );
 
@@ -406,30 +396,9 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
     'module' => 'user',
   );
 
-  // Exported permission: create bullet_point content.
-  $permissions['create bullet_point content'] = array(
-    'name' => 'create bullet_point content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: create bullet_point_attachment content.
-  $permissions['create bullet_point_attachment content'] = array(
-    'name' => 'create bullet_point_attachment content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: create meeting content.
-  $permissions['create meeting content'] = array(
-    'name' => 'create meeting content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: create speaker_paper content.
-  $permissions['create speaker_paper content'] = array(
-    'name' => 'create speaker_paper content',
+  // Exported permission: create os2web_meetings_spaper content.
+  $permissions['create os2web_meetings_spaper content'] = array(
+    'name' => 'create os2web_meetings_spaper content',
     'roles' => array(
       0 => 'authenticated user',
     ),
@@ -457,58 +426,9 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
     'module' => 'shortcut',
   );
 
-  // Exported permission: delete any bullet_point content.
-  $permissions['delete any bullet_point content'] = array(
-    'name' => 'delete any bullet_point content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: delete any bullet_point_attachment content.
-  $permissions['delete any bullet_point_attachment content'] = array(
-    'name' => 'delete any bullet_point_attachment content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: delete any meeting content.
-  $permissions['delete any meeting content'] = array(
-    'name' => 'delete any meeting content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: delete any speaker_paper content.
-  $permissions['delete any speaker_paper content'] = array(
-    'name' => 'delete any speaker_paper content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: delete own bullet_point content.
-  $permissions['delete own bullet_point content'] = array(
-    'name' => 'delete own bullet_point content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: delete own bullet_point_attachment content.
-  $permissions['delete own bullet_point_attachment content'] = array(
-    'name' => 'delete own bullet_point_attachment content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: delete own meeting content.
-  $permissions['delete own meeting content'] = array(
-    'name' => 'delete own meeting content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: delete own speaker_paper content.
-  $permissions['delete own speaker_paper content'] = array(
-    'name' => 'delete own speaker_paper content',
+  // Exported permission: delete own os2web_meetings_spaper content.
+  $permissions['delete own os2web_meetings_spaper content'] = array(
+    'name' => 'delete own os2web_meetings_spaper content',
     'roles' => array(
       0 => 'authenticated user',
     ),
@@ -529,57 +449,6 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
     'module' => 'lightbox2',
   );
 
-  // Exported permission: edit any bullet_point content.
-  $permissions['edit any bullet_point content'] = array(
-    'name' => 'edit any bullet_point content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: edit any bullet_point_attachment content.
-  $permissions['edit any bullet_point_attachment content'] = array(
-    'name' => 'edit any bullet_point_attachment content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: edit any meeting content.
-  $permissions['edit any meeting content'] = array(
-    'name' => 'edit any meeting content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: edit any page content.
-  $permissions['edit any page content'] = array(
-    'name' => 'edit any page content',
-    'roles' => array(
-      0 => 'os2dagsorden admin',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: edit any speaker_paper content.
-  $permissions['edit any speaker_paper content'] = array(
-    'name' => 'edit any speaker_paper content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: edit own bullet_point content.
-  $permissions['edit own bullet_point content'] = array(
-    'name' => 'edit own bullet_point content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: edit own bullet_point_attachment content.
-  $permissions['edit own bullet_point_attachment content'] = array(
-    'name' => 'edit own bullet_point_attachment content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
   // Exported permission: edit own comments.
   $permissions['edit own comments'] = array(
     'name' => 'edit own comments',
@@ -587,16 +456,9 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
     'module' => 'comment',
   );
 
-  // Exported permission: edit own meeting content.
-  $permissions['edit own meeting content'] = array(
-    'name' => 'edit own meeting content',
-    'roles' => array(),
-    'module' => 'node',
-  );
-
-  // Exported permission: edit own speaker_paper content.
-  $permissions['edit own speaker_paper content'] = array(
-    'name' => 'edit own speaker_paper content',
+  // Exported permission: edit own os2web_meetings_spaper content.
+  $permissions['edit own os2web_meetings_spaper content'] = array(
+    'name' => 'edit own os2web_meetings_spaper content',
     'roles' => array(
       0 => 'authenticated user',
     ),
@@ -697,18 +559,14 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
   // Exported permission: use text format filtered_html.
   $permissions['use text format filtered_html'] = array(
     'name' => 'use text format filtered_html',
-    'roles' => array(
-      0 => 'os2dagsorden admin',
-    ),
+    'roles' => array(),
     'module' => 'filter',
   );
 
   // Exported permission: use text format full_html.
   $permissions['use text format full_html'] = array(
     'name' => 'use text format full_html',
-    'roles' => array(
-      0 => 'authenticated user',
-    ),
+    'roles' => array(),
     'module' => 'filter',
   );
 
@@ -750,9 +608,7 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
   // Exported permission: view own unpublished content.
   $permissions['view own unpublished content'] = array(
     'name' => 'view own unpublished content',
-    'roles' => array(
-      0 => 'authenticated user',
-    ),
+    'roles' => array(),
     'module' => 'node',
   );
 
@@ -766,9 +622,7 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
   // Exported permission: view the administration theme.
   $permissions['view the administration theme'] = array(
     'name' => 'view the administration theme',
-    'roles' => array(
-      0 => 'os2dagsorden admin',
-    ),
+    'roles' => array(),
     'module' => 'system',
   );
 
