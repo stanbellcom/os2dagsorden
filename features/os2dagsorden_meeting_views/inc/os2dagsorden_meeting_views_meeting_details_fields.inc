@@ -103,6 +103,13 @@ function os2dagsorden_meeting_views_meeting_details_fields_indicator_meeting_has
 function os2dagsorden_meeting_views_meeting_details_fields_indicator_meeting_has_notes($meeting_id){
   os2dagsorden_meeting_views_common_meeting_has_notes($meeting_id);
 }
+/////////////////////////////////////////DELTOG fields start /////////////////////////////////////////
+function os2dagsorden_meeting_views_meeting_details_fields_participants_deltog($meeting_id){
+  $meeting = node_load($meeting_id);
+  print($meeting->field_os2web_meetings_partic['und'][0]['value']);
+}
+/////////////////////////////////////////DELTOG fields end /////////////////////////////////////////
+
 /////////////////////////////////////////PAGE fields end /////////////////////////////////////////
 
 /////////////////////////////////////////PRINT ALL SPEAKER PAPER fields start /////////////////////////////////////////
@@ -280,6 +287,11 @@ function os2dagsorden_meeting_views_meeting_details_fields_speaker_paper_link($m
       $link = $base_url . '?q=node/add/os2web-meetings-spaper&edit[field_os2web_meetings_sp_bullet][und][0][target_id]=' . $bp_title . ' (' . $bp_id . ')' . '&destination=' . $q;
       print '<a href="' . $link . '"><div class="indicator-create-speaker-paper"></div>Nyt talepapir</a>';
     }
+  }
+}
+function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_print_link($meeting_id, $bp_id){
+  if (os2dagsorden_access_helper_check_user_can_see_bullet_point($meeting_id, $bp_id)){
+    print '<span class="bullet-point-print-link">&nbsp</span>';
   }
 }
 /////////////////////////////////////////DAGSORDEN fields END /////////////////////////////////////////
