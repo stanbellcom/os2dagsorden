@@ -131,6 +131,30 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#options' => $options,
     '#description' => t('This decides whether a certain type of bullet point attachment - bilag will be expanded (activated) when functionality "Expand whole bullet point" is executed.'),
   );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_meeting_enddate'] = array (
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting end date on meeting view'),
+    '#description'=>t('This decides whether a meeting end date is visible on meeting view.'),
+    '#default_value' => variable_get('os2dagsorden_show_meeting_enddate', true),
+  );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_meeting_committee'] = array (
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting committee on meeting view'),
+    '#description'=>t('This decides whether a meeting committee is visible on meeting view.'),
+    '#default_value' => variable_get('os2dagsorden_show_meeting_committee', true),
+  );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_meeting_type'] = array (
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting type on meeting view'),
+    '#description'=>t('This decides whether a meeting type field is visible on meeting view.'),
+    '#default_value' => variable_get('os2dagsorden_show_meeting_type', true),
+  );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_samlet dokument link'] = array (
+    '#type' => 'checkbox',
+    '#title' => t('Show samlet dokument link on meeting view'),
+    '#description'=>t('This decides whether a samlet dokument link is visible on meeting view.'),
+    '#default_value' => variable_get('os2dagsorden_show_samlet dokument link', true),
+  );
   $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_print_icon'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show print icon on bullets in agenda'),

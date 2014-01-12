@@ -93,6 +93,20 @@ function os2dagsorden_meeting_views_meeting_details_description_download(){
     echo '<div class="clearfix"></div>';
   }
 }
+function os2dagsorden_meeting_views_meeting_description_download(){
+ global $base_url;
+  $q = explode('/',$_GET['q']);
+  $meeting_id = $q[1];
+     $meeting = node_load($meeting_id);
+    
+  //opened version - if not empty
+  if (!empty($meeting->field_meeting_description['und'][0]['uri'])){
+      echo '<a target="_blank" href="' . file_create_url($meeting->field_meeting_description['und'][0]['uri']) . 
+      '" ><span class="print-meeting-link">Samlet dokument</span> </a>';
+  }
+	else 
+      echo '<a target="_blank" href="/printpdf/meeting/'.$meeting_id.'/print" ><span class="print-meeting-link">Samlet dokument</span> </a>';
+}
 /////////////////////////////////////////header END /////////////////////////////////////////
 
 /////////////////////////////////////////PAGE fields start /////////////////////////////////////////
@@ -103,6 +117,31 @@ function os2dagsorden_meeting_views_meeting_details_fields_indicator_meeting_has
 function os2dagsorden_meeting_views_meeting_details_fields_indicator_meeting_has_notes($meeting_id){
   os2dagsorden_meeting_views_common_meeting_has_notes($meeting_id);
 }
+function os2dagsorden_meeting_views_meeting_details_fields_enddate($meeting_id){  
+    if (variable_get('os2dagsorden_show_meeting_enddate', true)) {
+        $meeting = node_load($meeting_id);
+        $date = field_get_items('node', $meeting, 'field_os2web_meetings_date');
+        $reset = date_default_timezone_get();
+        date_default_timezone_set("UTC");
+        strtotime($date[0]["value2"]);
+        print format_date(strtotime($date[0]["value2"]), $type = 'short', '', $date[0]['timezone']);
+        date_default_timezone_set($reset);
+    } 
+ }
+ function os2dagsorden_meeting_views_meeting_details_fields_committee($meeting_id){ 
+   if (variable_get('os2dagsorden_show_meeting_committee', true)) 
+      os2dagsorden_meeting_views_common_meeting_committee($meeting_id);
+ }
+  function os2dagsorden_meeting_views_meeting_details_fields_type($meeting_id){ 
+   if (variable_get('os2dagsorden_show_meeting_type', true)) 
+      $meeting = node_load($meeting_id);
+      $meeting_type=field_get_items('node', $meeting, 'field_os2web_meetings_type');
+      print $meeting_type[0]['value'];
+ }
+ function os2dagsorden_meeting_views_meeting_details_samlet_dokument_link(){
+   if (variable_get('os2dagsorden_show_samlet dokument link', true)) 
+       os2dagsorden_meeting_views_meeting_description_download();
+ }
 /////////////////////////////////////////DELTOG fields start /////////////////////////////////////////
 function os2dagsorden_meeting_views_meeting_details_fields_participants_deltog($meeting_id){
   $meeting = node_load($meeting_id);

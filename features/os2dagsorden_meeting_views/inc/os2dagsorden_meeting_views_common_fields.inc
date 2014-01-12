@@ -51,6 +51,12 @@ function os2dagsorden_meeting_views_common_meeting_title_listed($data){
       echo $title;
   }
 }
+
+function  os2dagsorden_meeting_views_common_meeting_committee ($meeting_id){
+    $meeting = node_load($meeting_id);
+    $meeting_committee=field_get_items('node', $meeting, 'field_os2web_meetings_committee');
+    print taxonomy_term_load($meeting_committee[0]["tid"])->name;
+}
 /////////////////////////////////////////meeting END/////////////////////////////////////////
 
 /////////////////////////////////////////bullet point START/////////////////////////////////////////
