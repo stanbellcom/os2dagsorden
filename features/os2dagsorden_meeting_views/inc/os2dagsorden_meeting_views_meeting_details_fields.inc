@@ -142,6 +142,7 @@ function os2dagsorden_meeting_views_meeting_details_fields_enddate($meeting_id){
    if (variable_get('os2dagsorden_show_samlet dokument link', true)) 
        os2dagsorden_meeting_views_meeting_description_download();
  }
+//////////////////////////////////////////PAGE fields end //////////////////////////////////////////// 
 /////////////////////////////////////////DELTOG fields start /////////////////////////////////////////
 function os2dagsorden_meeting_views_meeting_details_fields_participants_deltog($meeting_id){
   $meeting = node_load($meeting_id);
@@ -149,8 +150,17 @@ function os2dagsorden_meeting_views_meeting_details_fields_participants_deltog($
 }
 /////////////////////////////////////////DELTOG fields end /////////////////////////////////////////
 
-/////////////////////////////////////////PAGE fields end /////////////////////////////////////////
-
+/////////////////////////////////////////Afbud / Fraværende fields start /////////////////////////////////////////
+function os2dagsorden_meeting_views_meeting_details_fields_participants_afbud_access(){
+    return variable_get('os2dagsorden_show_participants_afbud', false);
+}
+function os2dagsorden_meeting_views_meeting_details_fields_participants_afbud($meeting_id){
+   $meeting = node_load($meeting_id);
+    if (isset($meeting->field_participants_cancellation['und'])) 
+        print($meeting->field_participants_cancellation['und'][0]['value']);
+  
+}
+/////////////////////////////////////////Afbud / Fraværende fields end /////////////////////////////////////////
 /////////////////////////////////////////PRINT ALL SPEAKER PAPER fields start /////////////////////////////////////////
 function os2dagsorden_meeting_views_meeting_details_fields_print_all_speaker_papers($nid){
   if (os2dagsorden_access_helper_meeting_has_speaker_paper($nid)){

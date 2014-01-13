@@ -155,6 +155,12 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#description'=>t('This decides whether a samlet dokument link is visible on meeting view.'),
     '#default_value' => variable_get('os2dagsorden_show_samlet dokument link', true),
   );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_participants_afbud'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show cancelled participants'),
+    '#description'=>t('This decides whether a list of cancelled participants  is visible on meeting view'),
+    '#default_value' => variable_get('os2dagsorden_show_participants_afbud', false),
+  );
   $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_print_icon'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show print icon on bullets in agenda'),
