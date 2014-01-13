@@ -194,7 +194,24 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#options' => $options3,
     '#description' => t('This decides whether a side menu expanded/collapsed.'),
   );
-  
+  //meeting search view settings
+   $form['os2dagsorden_meeting_search_view_settings'] = array(
+      '#type' => 'fieldset',
+      '#collapsible' => TRUE,
+      '#title' => t('Meeting search view settings'),
+  );
+  $form['os2dagsorden_meeting_search_view_settings']['os2dagsorden_meetings_search_show_meeting_committee'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting committee on meeting serach view'),
+    '#description'=>t('This decides whether a meeting committee is visible on meeting search view.'),
+    '#default_value' => variable_get('os2dagsorden_meetings_search_show_meeting_committee', true),
+  );
+  $form['os2dagsorden_meeting_search_view_settings']['os2dagsorden_meetings_search_show_meeting_status'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting status on meeting serach view'),
+    '#description'=>t('This decides whether a meeting status is visible on meeting search view.'),
+    '#default_value' => variable_get('os2dagsorden_meetings_search_show_meeting_status', false),
+  );
   //show or not show meeting category in the calendar
   $form['os2dagsorden_show_meeting_category_settings'] = array(
       '#type' => 'fieldset',
