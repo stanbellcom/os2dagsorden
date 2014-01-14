@@ -119,8 +119,8 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
   //meeting view settings
   $form['os2dagsorden_meeting_view_settings']['os2dagsorden_expand_all_bullets'] = array(
     '#type' => 'checkbox',
-    '#title' => t('Expand all bullets on agenda'),
-    '#description'=>t('This decides whether a  all bullet points will be expanded'),
+    '#title' => t('Expand all bullets on agenda page load'),
+    '#description'=>t('This decides whether all bullet points will be expanded on page load'),
     '#default_value' => variable_get('os2dagsorden_expand_all_bullets', false),
   );
   $options = array('true' => t('Expand'), 'false' => t('Not expand (but keep it that way if the bilag has been expanded before)'));
@@ -149,11 +149,11 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#description'=>t('This decides whether a meeting type field is visible on meeting view.'),
     '#default_value' => variable_get('os2dagsorden_show_meeting_type', true),
   );
-  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_samlet dokument link'] = array (
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_samlet_dokument_link'] = array (
     '#type' => 'checkbox',
     '#title' => t('Show samlet dokument link on meeting view'),
     '#description'=>t('This decides whether a samlet dokument link is visible on meeting view.'),
-    '#default_value' => variable_get('os2dagsorden_show_samlet dokument link', true),
+    '#default_value' => variable_get('os2dagsorden_show_samlet_dokument_link', true),
   );
   $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_participants_afbud'] = array(
     '#type' => 'checkbox',
@@ -193,6 +193,18 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#default_value' => variable_get('os2dagsorden_collapse_menu', true),
     '#options' => $options3,
     '#description' => t('This decides whether a side menu expanded/collapsed.'),
+  );
+  $form['os2dagsorden_frontpage_layout_settings']['os2dagsorden_meetings_views_last_8_show_meeting_committee'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting committee on frontpage'),
+    '#description'=>t('This decides whether a meeting committee is visible on frontpage.'),
+    '#default_value' => variable_get('os2dagsorden_meetings_views_last_8_show_meeting_committee', true),
+  );
+  $form['os2dagsorden_frontpage_layout_settings']['os2dagsorden_meetings_views_last_8_show_meeting_location'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting location on frontpage'),
+    '#description'=>t('This decides whether a meeting location is visible on frontpage.'),
+    '#default_value' => variable_get('os2dagsorden_meetings_views_last_8_show_meeting_location', true),
   );
   //meeting search view settings
    $form['os2dagsorden_meeting_search_view_settings'] = array(

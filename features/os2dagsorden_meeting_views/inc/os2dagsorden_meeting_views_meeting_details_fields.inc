@@ -139,7 +139,7 @@ function os2dagsorden_meeting_views_meeting_details_fields_enddate($meeting_id){
       print $meeting_type[0]['value'];
  }
  function os2dagsorden_meeting_views_meeting_details_samlet_dokument_link(){
-   if (variable_get('os2dagsorden_show_samlet dokument link', true)) 
+   if (variable_get('os2dagsorden_show_samlet_dokument_link', true)) 
        os2dagsorden_meeting_views_meeting_description_download();
  }
 //////////////////////////////////////////PAGE fields end //////////////////////////////////////////// 
@@ -147,6 +147,7 @@ function os2dagsorden_meeting_views_meeting_details_fields_enddate($meeting_id){
 function os2dagsorden_meeting_views_meeting_details_fields_participants_deltog($meeting_id){
   $meeting = node_load($meeting_id);
   print($meeting->field_os2web_meetings_partic['und'][0]['value']);
+  
 }
 /////////////////////////////////////////DELTOG fields end /////////////////////////////////////////
 
@@ -339,7 +340,8 @@ function os2dagsorden_meeting_views_meeting_details_fields_speaker_paper_link($m
   }
 }
 function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_print_link($meeting_id, $bp_id){
-  if (os2dagsorden_access_helper_check_user_can_see_bullet_point($meeting_id, $bp_id)){
+    
+  if (os2dagsorden_access_helper_check_user_can_see_bullet_point($meeting_id, $bp_id)&&variable_get('os2dagsorden_show_print_icon', false)){
     print '<span class="bullet-point-print-link">&nbsp</span>';
   }
 }
