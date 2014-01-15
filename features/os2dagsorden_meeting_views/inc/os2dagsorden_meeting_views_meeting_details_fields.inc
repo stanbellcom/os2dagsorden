@@ -157,8 +157,8 @@ function os2dagsorden_meeting_views_meeting_details_fields_participants_afbud_ac
 }
 function os2dagsorden_meeting_views_meeting_details_fields_participants_afbud($meeting_id){
    $meeting = node_load($meeting_id);
-    if (isset($meeting->field_participants_cancellation['und'])) 
-        print($meeting->field_participants_cancellation['und'][0]['value']);
+    if (isset($meeting->field_os2web_meetings_particcanl['und'])) 
+        print($meeting->field_os2web_meetings_particcanl['und'][0]['value']);
   
 }
 /////////////////////////////////////////Afbud / Fraværende fields end /////////////////////////////////////////
