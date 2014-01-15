@@ -340,9 +340,12 @@ function os2dagsorden_meeting_views_meeting_details_fields_speaker_paper_link($m
   }
 }
 function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_print_link($meeting_id, $bp_id){
-    
+  global $base_url;
+
   if (os2dagsorden_access_helper_check_user_can_see_bullet_point($meeting_id, $bp_id)&&variable_get('os2dagsorden_show_print_icon', false)){
-    print '<span class="bullet-point-print-link">&nbsp</span>';
+    print '<a href="' . $base_url . '/meeting/' . $meeting_id . '/bullet-point/' . $bp_id . '/print"><span class="bullet-point-print-link"></span>&nbsp;</a>';
+  } else {
+    print '<a href="' . $base_url . '/meeting/' . $meeting_id . '/bullet-point/' . $bp_id . '">&nbsp;</a>';
   }
 }
 /////////////////////////////////////////DAGSORDEN fields END /////////////////////////////////////////

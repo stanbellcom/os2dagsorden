@@ -1041,8 +1041,10 @@ os2dagsorden_meeting_views_meeting_details_fields_participants_afbud($row->nid);
     'field_os2web_meetings_bul_pers' => 'php_4',
     'php_1' => 'php_4',
     'php' => 'php_4',
+    'title' => 'title',
     'php_4' => 'php_4',
     'php_3' => 'php_4',
+    'php_5' => 'php_5',
     'php_2' => 'php_2',
   );
   $handler->display->display_options['style_options']['default'] = '-1';
@@ -1090,12 +1092,24 @@ os2dagsorden_meeting_views_meeting_details_fields_participants_afbud($row->nid);
       'separator' => '',
       'empty_column' => 0,
     ),
+    'title' => array(
+      'sortable' => 0,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
     'php_4' => array(
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
     'php_3' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'php_5' => array(
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
@@ -1264,10 +1278,10 @@ os2dagsorden_meeting_views_meeting_details_fields_bullet_point_attachments_with_
   $handler->display->display_options['fields']['php_5']['field'] = 'php';
   $handler->display->display_options['fields']['php_5']['ui_name'] = 'bullet point print link';
   $handler->display->display_options['fields']['php_5']['label'] = '';
-  $handler->display->display_options['fields']['php_5']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['php_5']['alter']['path'] = 'print/meeting/[nid_1]/bullet-point/[nid]/print';
   $handler->display->display_options['fields']['php_5']['element_class'] = 'print-bullet-point-link';
   $handler->display->display_options['fields']['php_5']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['php_5']['hide_empty'] = TRUE;
   $handler->display->display_options['fields']['php_5']['use_php_setup'] = 0;
   $handler->display->display_options['fields']['php_5']['php_output'] = '<?php
 $meeting_id = $row->nid_1;
@@ -1569,7 +1583,6 @@ os2dagsorden_meeting_views_meeting_details_fields_bullet_point_attachments_with_
   $handler->display->display_options['fields']['php_5']['field'] = 'php';
   $handler->display->display_options['fields']['php_5']['ui_name'] = 'bullet point print link';
   $handler->display->display_options['fields']['php_5']['label'] = '';
-  $handler->display->display_options['fields']['php_5']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['php_5']['alter']['path'] = 'print/meeting/[nid_1]/bullet-point/[nid]/print';
   $handler->display->display_options['fields']['php_5']['element_class'] = 'print-bullet-point-link';
   $handler->display->display_options['fields']['php_5']['element_label_colon'] = FALSE;
