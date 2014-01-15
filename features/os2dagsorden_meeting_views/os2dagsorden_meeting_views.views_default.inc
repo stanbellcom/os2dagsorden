@@ -2882,38 +2882,6 @@ print \'<a href="\' . $base_url . \'?q=node/add/speaker-paper&edit[field_ref_bul
   $handler->display->display_options['fields']['nid_1']['label'] = '';
   $handler->display->display_options['fields']['nid_1']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nid_1']['element_label_colon'] = FALSE;
-  /* Field: Broken/missing handler */
-  $handler->display->display_options['fields']['field_bul_point_closed']['id'] = 'field_bul_point_closed';
-  $handler->display->display_options['fields']['field_bul_point_closed']['table'] = 'field_data_field_bul_point_closed';
-  $handler->display->display_options['fields']['field_bul_point_closed']['field'] = 'field_bul_point_closed';
-  $handler->display->display_options['fields']['field_bul_point_closed']['ui_name'] = 'closed indicator';
-  $handler->display->display_options['fields']['field_bul_point_closed']['label'] = '';
-  $handler->display->display_options['fields']['field_bul_point_closed']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_bul_point_closed']['alter']['text'] = '<div class="indicator-unlocked"></div>';
-  $handler->display->display_options['fields']['field_bul_point_closed']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_bul_point_closed']['empty_zero'] = TRUE;
-  /* Field: Broken/missing handler */
-  $handler->display->display_options['fields']['field_bul_point_personal']['id'] = 'field_bul_point_personal';
-  $handler->display->display_options['fields']['field_bul_point_personal']['table'] = 'field_data_field_bul_point_personal';
-  $handler->display->display_options['fields']['field_bul_point_personal']['field'] = 'field_bul_point_personal';
-  $handler->display->display_options['fields']['field_bul_point_personal']['ui_name'] = 'Personal indicator';
-  $handler->display->display_options['fields']['field_bul_point_personal']['label'] = '';
-  $handler->display->display_options['fields']['field_bul_point_personal']['alter']['alter_text'] = TRUE;
-  $handler->display->display_options['fields']['field_bul_point_personal']['alter']['text'] = '<div class="indicator-personal"></div>';
-  $handler->display->display_options['fields']['field_bul_point_personal']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['field_bul_point_personal']['empty_zero'] = TRUE;
-  /* Field: Content: Title */
-  $handler->display->display_options['fields']['title']['id'] = 'title';
-  $handler->display->display_options['fields']['title']['table'] = 'node';
-  $handler->display->display_options['fields']['title']['field'] = 'title';
-  $handler->display->display_options['fields']['title']['label'] = '';
-  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
-  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  $handler->display->display_options['fields']['title']['element_type'] = 'h3';
-  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
-  $handler->display->display_options['fields']['title']['element_wrapper_type'] = 'div';
-  $handler->display->display_options['fields']['title']['element_wrapper_class'] = 'view-header';
-  $handler->display->display_options['fields']['title']['link_to_node'] = FALSE;
   /* Field: Title - PHP */
   $handler->display->display_options['fields']['php_1']['id'] = 'php_1';
   $handler->display->display_options['fields']['php_1']['table'] = 'views';
@@ -3084,8 +3052,6 @@ print \'<a href="\' . $base_url . \'?q=node/add/speaker-paper&edit[field_ref_bul
     t('speaker paper creator'),
     t('Alle'),
     t('Page'),
-    t('<div class="indicator-unlocked"></div>'),
-    t('<div class="indicator-personal"></div>'),
     t('Speaker paper'),
     t('<?php
 global $base_url;
