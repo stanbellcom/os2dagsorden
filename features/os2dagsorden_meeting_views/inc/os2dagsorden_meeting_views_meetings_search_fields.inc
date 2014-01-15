@@ -136,4 +136,17 @@ function os2dagsorden_meeting_views_meetings_search_fields_placering($meta_data)
     print('&nbsp;');
   }
 }
+
+function os2dagsorden_meeting_views_meetings_search_fields_committee($meeting_id){
+   if (variable_get('os2dagsorden_meetings_search_show_meeting_committee', true)) 
+      os2dagsorden_meeting_views_common_meeting_committee($meeting_id); 
+}
+
+function os2dagsorden_meeting_views_meetings_search_fields_status($meeting_id){
+    if (variable_get('os2dagsorden_meetings_search_show_meeting_status', false)) {
+        $meeting = $meeting = node_load($meeting_id);
+        $meeting_type = field_get_items('node', $meeting, 'field_os2web_meetings_type');
+        print $meeting_type[0]['value'];
+    }
+}
 /////////////////////////////////////////PAGE END /////////////////////////////////////////

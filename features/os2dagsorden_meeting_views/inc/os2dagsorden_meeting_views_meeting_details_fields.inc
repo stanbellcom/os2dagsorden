@@ -93,6 +93,20 @@ function os2dagsorden_meeting_views_meeting_details_description_download(){
     echo '<div class="clearfix"></div>';
   }
 }
+function os2dagsorden_meeting_views_meeting_description_download(){
+ global $base_url;
+  $q = explode('/',$_GET['q']);
+  $meeting_id = $q[1];
+     $meeting = node_load($meeting_id);
+    
+  //opened version - if not empty
+  if (!empty($meeting->field_meeting_description['und'][0]['uri'])){
+      echo '<a target="_blank" href="' . file_create_url($meeting->field_meeting_description['und'][0]['uri']) . 
+      '" ><span class="print-meeting-link">Samlet dokument</span> </a>';
+  }
+	else 
+      echo '<a target="_blank" href="/printpdf/meeting/'.$meeting_id.'/print" ><span class="print-meeting-link">Samlet dokument</span> </a>';
+}
 /////////////////////////////////////////header END /////////////////////////////////////////
 
 /////////////////////////////////////////PAGE fields start /////////////////////////////////////////
@@ -103,8 +117,51 @@ function os2dagsorden_meeting_views_meeting_details_fields_indicator_meeting_has
 function os2dagsorden_meeting_views_meeting_details_fields_indicator_meeting_has_notes($meeting_id){
   os2dagsorden_meeting_views_common_meeting_has_notes($meeting_id);
 }
-/////////////////////////////////////////PAGE fields end /////////////////////////////////////////
+function os2dagsorden_meeting_views_meeting_details_fields_enddate($meeting_id){  
+    if (variable_get('os2dagsorden_show_meeting_enddate', true)) {
+        $meeting = node_load($meeting_id);
+        $date = field_get_items('node', $meeting, 'field_os2web_meetings_date');
+        $reset = date_default_timezone_get();
+        date_default_timezone_set("UTC");
+        strtotime($date[0]["value2"]);
+        print format_date(strtotime($date[0]["value2"]), $type = 'short', '', $date[0]['timezone']);
+        date_default_timezone_set($reset);
+    } 
+ }
+ function os2dagsorden_meeting_views_meeting_details_fields_committee($meeting_id){ 
+   if (variable_get('os2dagsorden_show_meeting_committee', true)) 
+      os2dagsorden_meeting_views_common_meeting_committee($meeting_id);
+ }
+  function os2dagsorden_meeting_views_meeting_details_fields_type($meeting_id){ 
+   if (variable_get('os2dagsorden_show_meeting_type', true)) 
+      $meeting = node_load($meeting_id);
+      $meeting_type=field_get_items('node', $meeting, 'field_os2web_meetings_type');
+      print $meeting_type[0]['value'];
+ }
+ function os2dagsorden_meeting_views_meeting_details_samlet_dokument_link(){
+   if (variable_get('os2dagsorden_show_samlet_dokument_link', true)) 
+       os2dagsorden_meeting_views_meeting_description_download();
+ }
+//////////////////////////////////////////PAGE fields end //////////////////////////////////////////// 
+/////////////////////////////////////////DELTOG fields start /////////////////////////////////////////
+function os2dagsorden_meeting_views_meeting_details_fields_participants_deltog($meeting_id){
+  $meeting = node_load($meeting_id);
+  print($meeting->field_os2web_meetings_partic['und'][0]['value']);
+  
+}
+/////////////////////////////////////////DELTOG fields end /////////////////////////////////////////
 
+/////////////////////////////////////////Afbud / Fraværende fields start /////////////////////////////////////////
+function os2dagsorden_meeting_views_meeting_details_fields_participants_afbud_access(){
+    return variable_get('os2dagsorden_show_participants_afbud', false);
+}
+function os2dagsorden_meeting_views_meeting_details_fields_participants_afbud($meeting_id){
+   $meeting = node_load($meeting_id);
+    if (isset($meeting->field_participants_cancellation['und'])) 
+        print($meeting->field_participants_cancellation['und'][0]['value']);
+  
+}
+/////////////////////////////////////////Afbud / Fraværende fields end /////////////////////////////////////////
 /////////////////////////////////////////PRINT ALL SPEAKER PAPER fields start /////////////////////////////////////////
 function os2dagsorden_meeting_views_meeting_details_fields_print_all_speaker_papers($nid){
   if (os2dagsorden_access_helper_meeting_has_speaker_paper($nid)){
@@ -282,4 +339,41 @@ function os2dagsorden_meeting_views_meeting_details_fields_speaker_paper_link($m
     }
   }
 }
+function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_print_link($meeting_id, $bp_id){
+    
+  if (os2dagsorden_access_helper_check_user_can_see_bullet_point($meeting_id, $bp_id)&&variable_get('os2dagsorden_show_print_icon', false)){
+    print '<span class="bullet-point-print-link">&nbsp</span>';
+  }
+}
 /////////////////////////////////////////DAGSORDEN fields END /////////////////////////////////////////
+
+/////////////////////////////////////////DAGSORDEN filter fields START /////////////////////////////////////////
+function os2dagsorden_meeting_views_meeting_details_fields_filter_bullet_point($nid, $filter_opened){
+   if (variable_get('os2dagsorden_group_closed_bullet_points', 'false') === 'false'){//put inline
+    //accept every type
+    return FALSE;
+  } else {//put separately
+    $bullet_point = node_load($nid);
+    
+    if ($filter_opened){//accept opened
+      if ($bullet_point->field_os2web_meetings_bul_closed['und'][0]['value'] == 0)
+	return FALSE;
+      else
+	return TRUE;
+    } else {//accept closed
+      if ($bullet_point->field_os2web_meetings_bul_closed['und'][0]['value'] == 1)
+	return FALSE;
+      else
+	return TRUE;
+    }
+  }
+}
+/////////////////////////////////////////DAGSORDEN filter fields END /////////////////////////////////////////
+
+/////////////////////////////////////////LUKKET DAGSORDEN fields START /////////////////////////////////////////
+function os2dagsorden_meeting_views_meeting_details_lukket_dagsorden_access(){
+  if (os2dagsorden_meeting_views_meeting_details_dagsorden_access()){
+    return variable_get('os2dagsorden_group_closed_bullet_points', 'false') === 'true';
+  }
+}
+/////////////////////////////////////////LUKKET DAGSORDEN fields END /////////////////////////////////////////

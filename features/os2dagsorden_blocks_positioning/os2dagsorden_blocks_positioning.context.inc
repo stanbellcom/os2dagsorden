@@ -111,7 +111,6 @@ function os2dagsorden_blocks_positioning_context_default_contexts() {
     ),
     'user' => array(
       'values' => array(
-        'administrator' => 'administrator',
         'authenticated user' => 'authenticated user',
       ),
     ),
@@ -123,37 +122,31 @@ function os2dagsorden_blocks_positioning_context_default_contexts() {
           'module' => 'views',
           'delta' => 'events-block_1',
           'region' => 'sidebar_second',
-          'weight' => '-23',
+          'weight' => '-21',
         ),
         'menu-menu-sidepane-menu' => array(
           'module' => 'menu',
           'delta' => 'menu-sidepane-menu',
           'region' => 'sidebar_second',
-          'weight' => '-22',
+          'weight' => '-20',
         ),
         'views-user_committee-block_1' => array(
           'module' => 'views',
           'delta' => 'user_committee-block_1',
           'region' => 'sidebar_second',
-          'weight' => '-21',
+          'weight' => '-19',
         ),
         'views-user_follow_committees-block_1' => array(
           'module' => 'views',
           'delta' => 'user_follow_committees-block_1',
           'region' => 'sidebar_second',
-          'weight' => '-20',
+          'weight' => '-18',
         ),
         'views--exp-meetings_search-page' => array(
           'module' => 'views',
           'delta' => '-exp-meetings_search-page',
           'region' => 'sidebar_second',
-          'weight' => '-19',
-        ),
-        'block-2' => array(
-          'module' => 'block',
-          'delta' => 2,
-          'region' => 'sidebar_second',
-          'weight' => '-18',
+          'weight' => '-10',
         ),
       ),
     ),
@@ -213,17 +206,11 @@ function os2dagsorden_blocks_positioning_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
-        'views-bae826754ab8812775bd594878d7fdb1' => array(
-          'module' => 'views',
-          'delta' => 'bae826754ab8812775bd594878d7fdb1',
-          'region' => 'content',
-          'weight' => '-21',
-        ),
         'views-c8c6c91b397acf23018fcefd40a1fa29' => array(
           'module' => 'views',
           'delta' => 'c8c6c91b397acf23018fcefd40a1fa29',
           'region' => 'content',
-          'weight' => '-20',
+          'weight' => '0',
         ),
       ),
     ),

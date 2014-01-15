@@ -109,20 +109,121 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
   $form['#submit'][] = 'os2dagsorden_settings_cron_job_submit';
   
   //expand or not expand bilag on bullet point expand
-  $form['os2dagsorden_expand_attachment_settings'] = array(
+   //Meetig view settings
+  $form['os2dagsorden_meeting_view_settings'] = array(
       '#type' => 'fieldset',
       '#collapsible' => TRUE,
-      '#title' => t('Expand/not expand Bilag on bullet point expanding'),
+      '#title' => t('Meeting view settings'),
+  );
+  
+  //meeting view settings
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_expand_all_bullets'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Expand all bullets on agenda page load'),
+    '#description'=>t('This decides whether all bullet points will be expanded on page load'),
+    '#default_value' => variable_get('os2dagsorden_expand_all_bullets', false),
   );
   $options = array('true' => t('Expand'), 'false' => t('Not expand (but keep it that way if the bilag has been expanded before)'));
-  $form['os2dagsorden_expand_attachment_settings']['os2dagsorden_expand_attachment'] = array(
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_expand_attachment'] = array(
     '#type' => 'radios',
     '#title' => t('Expand attachment'),
     '#default_value' => variable_get('os2dagsorden_expand_attachment'),
     '#options' => $options,
     '#description' => t('This decides whether a certain type of bullet point attachment - bilag will be expanded (activated) when functionality "Expand whole bullet point" is executed.'),
   );
-  
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_meeting_enddate'] = array (
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting end date on meeting view'),
+    '#description'=>t('This decides whether a meeting end date is visible on meeting view.'),
+    '#default_value' => variable_get('os2dagsorden_show_meeting_enddate', true),
+  );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_meeting_committee'] = array (
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting committee on meeting view'),
+    '#description'=>t('This decides whether a meeting committee is visible on meeting view.'),
+    '#default_value' => variable_get('os2dagsorden_show_meeting_committee', true),
+  );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_meeting_type'] = array (
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting type on meeting view'),
+    '#description'=>t('This decides whether a meeting type field is visible on meeting view.'),
+    '#default_value' => variable_get('os2dagsorden_show_meeting_type', true),
+  );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_samlet_dokument_link'] = array (
+    '#type' => 'checkbox',
+    '#title' => t('Show samlet dokument link on meeting view'),
+    '#description'=>t('This decides whether a samlet dokument link is visible on meeting view.'),
+    '#default_value' => variable_get('os2dagsorden_show_samlet_dokument_link', true),
+  );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_participants_afbud'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show cancelled participants'),
+    '#description'=>t('This decides whether a list of cancelled participants  is visible on meeting view'),
+    '#default_value' => variable_get('os2dagsorden_show_participants_afbud', false),
+  );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_print_icon'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show print icon on bullets in agenda'),
+    '#description'=>t('This decides whether a print button is visible on each bullet point on meeting view.'),
+    '#default_value' => variable_get('os2dagsorden_show_print_icon', false),
+  );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_bilag'] = array (
+    '#type' => 'checkbox',
+    '#title' => t('Show bullet point attachment (bilag) on meeting view and bullet point attachment views'),
+    '#description'=>t('This decides whether a bullet point attachment converted from PDF to HTML is going to be shown in the application.<br/>Can be useful to disable display if users are known to used old browser versions (>IE8).'),
+    '#default_value' => variable_get('os2dagsorden_show_bilag', true),
+  );    
+   $form['os2dagsorden_meeting_view_settings']['os2dagsorden_group_closed_bullet_points'] = array(
+    '#type' => 'radios',
+    '#title' => t('Group closed closed bullet points as a separate block'),
+    '#default_value' => variable_get('os2dagsorden_group_closed_bullet_points', 'false'),
+    '#options' => array('true' => t('Group separately'), 'false' => t('Put inline')),
+    '#description' => t('This decides whether closed bullet points will be grouped separately as a additional block called "Lukket dagsorden", or put inline together the rest of the bullet points.'),
+  );
+  // frontpage layout settings
+  $form['os2dagsorden_frontpage_layout_settings'] = array(
+     '#type' => 'fieldset',
+     '#collapsible' => TRUE,
+     '#title' => t('Frontpage layout and settings'),
+  );
+  $options3 = array('false' => t('Expand'), 'true' => t('Collapse') );
+  $form['os2dagsorden_frontpage_layout_settings']['os2dagsorden_collapse_menu'] = array(
+    '#type' => 'radios',
+    '#title' => t('Collapse/expand menu'),
+    '#default_value' => variable_get('os2dagsorden_collapse_menu', true),
+    '#options' => $options3,
+    '#description' => t('This decides whether a side menu expanded/collapsed.'),
+  );
+  $form['os2dagsorden_frontpage_layout_settings']['os2dagsorden_meetings_views_last_8_show_meeting_committee'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting committee on frontpage'),
+    '#description'=>t('This decides whether a meeting committee is visible on frontpage.'),
+    '#default_value' => variable_get('os2dagsorden_meetings_views_last_8_show_meeting_committee', true),
+  );
+  $form['os2dagsorden_frontpage_layout_settings']['os2dagsorden_meetings_views_last_8_show_meeting_location'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting location on frontpage'),
+    '#description'=>t('This decides whether a meeting location is visible on frontpage.'),
+    '#default_value' => variable_get('os2dagsorden_meetings_views_last_8_show_meeting_location', true),
+  );
+  //meeting search view settings
+   $form['os2dagsorden_meeting_search_view_settings'] = array(
+      '#type' => 'fieldset',
+      '#collapsible' => TRUE,
+      '#title' => t('Meeting search view settings'),
+  );
+  $form['os2dagsorden_meeting_search_view_settings']['os2dagsorden_meetings_search_show_meeting_committee'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting committee on meeting serach view'),
+    '#description'=>t('This decides whether a meeting committee is visible on meeting search view.'),
+    '#default_value' => variable_get('os2dagsorden_meetings_search_show_meeting_committee', true),
+  );
+  $form['os2dagsorden_meeting_search_view_settings']['os2dagsorden_meetings_search_show_meeting_status'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show meeting status on meeting serach view'),
+    '#description'=>t('This decides whether a meeting status is visible on meeting search view.'),
+    '#default_value' => variable_get('os2dagsorden_meetings_search_show_meeting_status', false),
+  );
   //show or not show meeting category in the calendar
   $form['os2dagsorden_show_meeting_category_settings'] = array(
       '#type' => 'fieldset',
