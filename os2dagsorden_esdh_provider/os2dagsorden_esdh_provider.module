@@ -149,3 +149,25 @@ function os2dagsorden_esdh_provider_bullet_add_number($node, $number){
   $node->field_os2web_meetings_bul_number[LANGUAGE_NONE][]['value'] = $number;
   return $node;
 }
+
+/**
+ * Implements hook_node_delete().
+ *
+ * Deletes the associated speaker papers when deleting bullets
+ */
+function os2dagsorden_esdh_provider_node_delete($node){
+  if ($node->type === 'os2web_meetings_bullet') {
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+        ->propertyCondition('type', array('os2web_meetings_spaper'))
+        ->fieldCondition('field_os2web_meetings_sp_bullet', 'target_id', $node->nid, '=');
+
+    $result = $query->execute();
+    if (isset($result['node'])){
+      drupal_set_message('here');
+      $nids = array_keys($result['node']);
+      foreach ($nids as $nid)
+        node_delete($nid);
+    }
+  }
+}
