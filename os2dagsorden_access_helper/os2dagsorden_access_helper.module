@@ -641,135 +641,122 @@ function os2dagsorden_access_helper_is_touch(){
 
 
 /**
- * Changes the status of a meeting and saves the node
+ * Hook to node_presave
  * The function will delete the connection to the member object, as well as the role object itself.
  *
  * @param $node   mixed  meeting node to be saved
- * @param $status string new status of meeting
  *
  * @return $node meeting
  */
-function os2dagsorden_access_helper_set_meeting_status_and_save($node, $status) {
-  if (strcasecmp($status, 'Dagsorden') == 0 || strcasecmp($status, 'Referat') == 0){
-    $node->field_os2web_meetings_type['und'][0]['value'] = $status;
-    
-    // Save the meeting node.
-    node_submit($node);
-    node_save($node);
-    
-    $committee_id = $node->field_os2web_meetings_committee['und'][0]['tid'];
-    $committee = taxonomy_term_load($committee_id);
-    
-    $notification_committees = explode(',',variable_get('os2dagsorden_send_notification_committee'));
-    $send_notification = FALSE;
-    
-    if (isset($committee->field_os2web_meetings_com_subid['und'])) {
-	foreach ($committee->field_os2web_meetings_com_subid['und'] as $id_raw) {
-	    if (in_array(intval($id_raw['value']), $notification_committees)) {
-		$send_notification = TRUE;
-		break;
-	    }
-	}
-    }
-    $days_since_meeting_date = (time() - strtotime($node->field_os2web_meetings_date['und'][0]['value']))/60/60/24;
-    
-    if ($send_notification && $days_since_meeting_date < variable_get('os2dagsorden_send_timespan_of_notification', ACADRE_MM_DEFAULT_TIMESPAN_OF_NOTIFICATION)){
-      //send the email to involved people
-      //medlem
-      $query = new EntityFieldQuery();
-      $query->entityCondition('entity_type', 'user')
-	  ->fieldCondition('field_user_committee', 'tid', $committee_id, '=');    
-      $result = $query->execute();
+function os2dagsorden_access_helper_node_presave($node) {
+  if ($node->type === 'os2web_meetings_meeting'){
+    $status = $node->field_os2web_meetings_type['und'][0]['value'];
+    if (strcasecmp($status, 'Dagsorden') == 0 || strcasecmp($status, 'Referat') == 0){
+      $committee_id = $node->field_os2web_meetings_committee['und'][0]['tid'];
+      $committee = taxonomy_term_load($committee_id);
       
-      $uids = array();
+      $notification_committees = explode(',',variable_get('os2dagsorden_send_notification_committee'));
+      $send_notification = FALSE;
       
-      if (isset($result['user'])) {
-	  $uids = array_keys($result['user']);
+      if (isset($committee->field_os2web_meetings_com_subid['und'])) {
+	  foreach ($committee->field_os2web_meetings_com_subid['und'] as $id_raw) {
+	      if (in_array(intval($id_raw['value']), $notification_committees)) {
+		  $send_notification = TRUE;
+		  break;
+	      }
+	  }
       }
-	
-      //follow+  
-      $query = new EntityFieldQuery();
-      $query->entityCondition('entity_type', 'user')
-	  ->fieldCondition('field_follows_committee_plus', 'tid', $committee_id, '='); 
-      $result = $query->execute();
-      if (isset($result['user'])) {
-	  $uids = array_merge($uids, array_keys($result['user']));
-      }
+      $days_since_meeting_date = (time() - strtotime($node->field_os2web_meetings_date['und'][0]['value']))/60/60/24;
       
-      $cName = taxonomy_term_load($committee_id)->name;
-      $mName = check_plain($node->title);
-      $mDate = check_plain($node->field_os2web_meetings_date['und'][0]['value']);
-      
-      $published_item = (strcasecmp($status, 'Dagsorden') == 0) ? 'en dagsorden' : 'et referat';
-      
-      //removing duplicates
-      $uids = array_unique($uids);
-      
-      foreach ($uids as $uid){
-	//checking is there has been a notification for the same meeting, to the same user, with the same status 
-	//in the previous hour
-	$query = db_select('os2dagsorden_notification_emails', 'ne');
-	$query->fields('ne')
-	      ->condition('uid', $uid)
-	      ->condition('meeting_nid', $node->nid)
-	      ->condition('status', strtolower($status))
-	      ->condition('date', gmdate("Y-m-d H:i:s", strtotime("now - 1 hour")), ">=");
+      if ($send_notification && $days_since_meeting_date < variable_get('os2dagsorden_send_timespan_of_notification', ACADRE_MM_DEFAULT_TIMESPAN_OF_NOTIFICATION)){
+	//send the email to involved people
+	//medlem
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'user')
+	    ->fieldCondition('field_user_committee', 'tid', $committee_id, '=');    
 	$result = $query->execute();
-    
-	//if result is empty, then send the mail
-	if (!$result->rowCount()){
-	  $user = user_load($uid);
+	
+	$uids = array();
+	
+	if (isset($result['user'])) {
+	    $uids = array_keys($result['user']);
+	}
 	  
-	  $uName = $user->field_user_full_name['und'][0]['value'];
-	  $subject = ucfirst($published_item) . ' til ' . $mName . ' er publiceret';
-	  
-	  $body = '<html><body>' . 
-		  'Til ' . $uName . '<br/><br/>' . 
-		  'Du abonnerer på ' . $cName . '<br/>' .
-		  'Der er publiceret ' . $published_item . ' til ' . $mName . ' ' . $mDate .
-		  '</body></html>';
-	  $from = variable_get('system_mail', $my_email);
-	  $message = array(
-	    'to' => $user->mail,
-	    'subject' => $subject,
-	    'body' => $body,
-	    'headers' => array(
-	      'MIME-Version' => '1.0',
-	      'From' => $from,
-	      'Sender' => $from,
-	      'Return-Path' => $from,
-	      'Content-Type' => 'text/html;charset=utf-8',
-	    ),
-	  );
-	  $system = drupal_mail_system("os2dagsorden_access_helper_set_meeting_status_and_save", "");
+	//follow+  
+	$query = new EntityFieldQuery();
+	$query->entityCondition('entity_type', 'user')
+	    ->fieldCondition('field_follows_committee_plus', 'tid', $committee_id, '='); 
+	$result = $query->execute();
+	if (isset($result['user'])) {
+	    $uids = array_merge($uids, array_keys($result['user']));
+	}
+	
+	$cName = taxonomy_term_load($committee_id)->name;
+	$mName = check_plain($node->title);
+	$mDate = check_plain($node->field_os2web_meetings_date['und'][0]['value']);
+	
+	$published_item = (strcasecmp($status, 'Dagsorden') == 0) ? 'en dagsorden' : 'et referat';
+	
+	//removing duplicates
+	$uids = array_unique($uids);
+	
+	foreach ($uids as $uid){
+	  //checking is there has been a notification for the same meeting, to the same user, with the same status 
+	  //in the previous hour
+	  $query = db_select('os2dagsorden_notification_emails', 'ne');
+	  $query->fields('ne')
+		->condition('uid', $uid)
+		->condition('meeting_id', $node->field_os2web_meetings_id['und'][0]['value'])
+		->condition('status', strtolower($status))
+		->condition('date', gmdate("Y-m-d H:i:s", strtotime("now - 1 hour")), ">=");
+	  $result = $query->execute();
 
-	  // The format function must be called before calling the mail function. 
-	  //$message = $system->format($message); 
-	  $system->mail($message);
-	  
-	  //setting the database entry about sent email
-	  db_insert('os2dagsorden_notification_emails')
-	    ->fields(array(
-	      'uid' => $uid,
-	      'meeting_nid' => $node->nid,
-	      'date' => gmdate("Y-m-d H:i:s", REQUEST_TIME),
-	      'status' => strtolower($status),
-	    ))
-	  ->execute();
+	  //if result is empty, then send the mail
+	  if (!$result->rowCount()){
+	    $user = user_load($uid);
+	    
+	    $uName = $user->field_user_full_name['und'][0]['value'];
+	    $subject = ucfirst($published_item) . ' til ' . $mName . ' er publiceret';
+	    
+	    $body = '<html><body>' . 
+		    'Til ' . $uName . '<br/><br/>' . 
+		    'Du abonnerer på ' . $cName . '<br/>' .
+		    'Der er publiceret ' . $published_item . ' til ' . $mName . ' ' . $mDate .
+		    '</body></html>';
+	    $from = variable_get('system_mail', $my_email);
+	    $message = array(
+	      'to' => $user->mail,
+	      'subject' => $subject,
+	      'body' => $body,
+	      'headers' => array(
+		'MIME-Version' => '1.0',
+		'From' => $from,
+		'Sender' => $from,
+		'Return-Path' => $from,
+		'Content-Type' => 'text/html;charset=utf-8',
+	      ),
+	    );
+	    $system = drupal_mail_system("os2dagsorden_access_helper_node_save", "");
+  
+	    // The format function must be called before calling the mail function. 
+	    //$message = $system->format($message); 
+	    $system->mail($message);
+	    
+	    //setting the database entry about sent email
+	    db_insert('os2dagsorden_notification_emails')
+	      ->fields(array(
+		'uid' => $uid,
+		'meeting_id' => $node->field_os2web_meetings_id['und'][0]['value'],
+		'date' => gmdate("Y-m-d H:i:s", REQUEST_TIME),
+		'status' => strtolower($status),
+	      ))
+	    ->execute();
+	  }
 	}
       }
     }
-    
-    return $node;
-  } else { //'Aflyst', 'Ændret', 'Dagsorden+', 'Referat+'
-    $node->field_os2web_meetings_type['und'][0]['value'] = $status;
-    
-    // Save the meeting node.
-    node_submit($node);
-    node_save($node);
-    
-    return $node;
   }
+  return $node;
 }
 
 /**

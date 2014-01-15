@@ -866,34 +866,27 @@ function _os2dagsorden_importer_create_meeting($xml_data, $tid) {
     //avoiding reimports, or value overriding
     if (!empty($node->field_os2web_meetings_system_id['und']['0']['value']) && $node->field_os2web_meetings_system_id['und']['0']['value'] != 0) {
 	
-	$need_to_update = FALSE;
 	
 	//updating meetings category
 	if (strcmp($node->field_os2web_meetings_category[$node->language][0]['value'], strtolower($xml_data['meeting_category'])) != 0){
 	  $node->field_os2web_meetings_category[$node->language][0]['value'] = strtolower($xml_data['meeting_category']);
-	  $need_to_update = TRUE;//setting to flag to update
 	}
 	
 	//updating the color
 	if (strcmp($node->field_os2web_meetings_hex[$node->language][0]['value'], strtolower($xml_data['hex_color'])) != 0){
 	  $node->field_os2web_meetings_hex[$node->language][0]['value'] = strtolower($xml_data['hex_color']);
-	  $need_to_update = TRUE;//setting to flag to update
 	}
 	
 	//if meeting is to be cancelled, but is not cancelled yet, then cancell it.
 	if ($xml_data['cancelled'] == 1 && strcmp($node->field_os2web_meetings_type[$node->language][0]['value'],'Aflyst') != 0){
-	  os2dagsorden_access_helper_set_meeting_status_and_save($node, 'Aflyst');
-	  $need_to_update = FALSE;//already updated, resetting flag
+	    $node->field_os2web_meetings_type['und'][0]['value'] = "Aflyst";	  
 	} //if meeting is changed, but is not marked as changed then mark is as changed
 	else if ($xml_data['changed'] == 1 && strcmp($node->field_os2web_meetings_type[$node->language][0]['value'],'Planlagt') == 0){
-	  os2dagsorden_access_helper_set_meeting_status_and_save($node, 'Ændret');
-	  $need_to_update = FALSE;//already updated, resetting flag
+	    $node->field_os2web_meetings_type['und'][0]['value'] = "Ændret";
 	}
 	
-	if ($need_to_update) {
-	  node_submit($node);
-	  node_save($node);
-	}
+	node_submit($node);
+	node_save($node);
 	
 	return $node;
     }
@@ -926,13 +919,16 @@ function _os2dagsorden_importer_create_meeting($xml_data, $tid) {
     $node->field_os2web_meetings_committee[$node->language][0]['tid'] = $tid;
     
     if ($xml_data['cancelled'] == 1){
-      os2dagsorden_access_helper_set_meeting_status_and_save($node, 'Aflyst');
+	$node->field_os2web_meetings_type['und'][0]['value'] = "Aflyst";
     } else if ($xml_data['changed'] == 1){
-      os2dagsorden_access_helper_set_meeting_status_and_save($node, 'Ændret');
+	$node->field_os2web_meetings_type['und'][0]['value'] = "Ændret";
     }
     else {
-      os2dagsorden_access_helper_set_meeting_status_and_save($node, 'Planlagt');
+	$node->field_os2web_meetings_type['und'][0]['value'] = "Planlagt";
     }
+    
+    node_submit($node);
+    node_save($node);
 }
 
 /**
