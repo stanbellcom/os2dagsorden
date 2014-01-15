@@ -133,4 +133,6 @@ function os2dagsorden_esdh_provider_process_closed_bullet($node, $item){
       }
     }
   }
+
+  return $node;
 }
