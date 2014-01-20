@@ -245,10 +245,10 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
       '#collapsible' => TRUE,
       '#title' => t('General meeting import settings'),
   );
-  $form['os2dagsorden_meeting_import']['participants_delimeter'] = array(
+  $form['os2dagsorden_meeting_import']['os2dagsorden_participants_delimeter'] = array(
     '#type' => 'textfield',
     '#title' => t('Participants delimeter sign'),
-    '#default_value' => variable_get('participants_delimeter'),
+    '#default_value' => variable_get('os2dagsorden_participants_delimeter', ', '),
     '#description' => t('Sign with which the participants of the meeting will be separated. Is used in the meeting view.<br/> E.g. if delimeter is <b>coma (,)</b> the list would look like:<br/>
     Jørgen Andersen, Nich Bendtsen, Poul Møller, ...<br/><br/>HTML tags (such as &lt;br/&gt;) can be used.'),
   );
