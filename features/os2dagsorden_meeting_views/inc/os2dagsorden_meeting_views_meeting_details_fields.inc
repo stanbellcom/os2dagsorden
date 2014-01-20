@@ -372,8 +372,8 @@ function os2dagsorden_meeting_views_meeting_details_fields_filter_bullet_point($
 
 /////////////////////////////////////////LUKKET DAGSORDEN fields START /////////////////////////////////////////
 function os2dagsorden_meeting_views_meeting_details_lukket_dagsorden_access(){
-  if (os2dagsorden_meeting_views_meeting_details_dagsorden_access()){
-    return variable_get('os2dagsorden_group_closed_bullet_points', 'false') === 'true';
+  if (os2dagsorden_meeting_views_meeting_details_dagsorden_access()){ 
+       return variable_get('os2dagsorden_group_closed_bullet_points', 'false') === 'true';
   }
 }
 /////////////////////////////////////////LUKKET DAGSORDEN fields END /////////////////////////////////////////

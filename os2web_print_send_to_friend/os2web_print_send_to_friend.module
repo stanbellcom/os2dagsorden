@@ -173,6 +173,7 @@ function os2web_print_send_to_friend_print_dagsorden($meeting_id) {
 	//drupal_add_css('.view-display-id-attachment_2{ display: none;}', 'inline');
 	drupal_add_css('.view-display-id-attachment_1{ display: none;}', 'inline');
 	drupal_add_css('.view-display-id-attachment_5{ display: none;}', 'inline');
+        drupal_add_css('.lukket-dagsorden{ display: none;}', 'inline');
 	//drupal_add_css('.view-display-id-attachment_4{ display: none;}', 'inline');
 	drupal_add_css('.hide-on-print{ display: none; }', 'inline');
 	drupal_add_css('.form-submit {display: none; }', 'inline');
