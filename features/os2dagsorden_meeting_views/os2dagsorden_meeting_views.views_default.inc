@@ -710,6 +710,7 @@ os2dagsorden_meeting_views_meeting_details_fields_indicator_meeting_has_notes($r
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'node';
   $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = 'Titel';
   $handler->display->display_options['fields']['title']['alter']['max_length'] = '50';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
@@ -1641,7 +1642,7 @@ os2dagsorden_meeting_views_meeting_details_fields_speaker_paper_link($meeting_id
     t('Page'),
     t('Mødedetaljer'),
     t('term from field_os2web_meetings_committee'),
-    t('Title'),
+    t('Titel'),
     t('Startdato'),
     t('Slutdato'),
     t('Udvalg'),
