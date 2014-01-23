@@ -2363,7 +2363,7 @@ os2dagsorden_meeting_views_meetings_search_help_text();
 
   /* Display: Master */
   $handler = $view->new_display('default', 'Master', 'default');
-  $handler->display->display_options['title'] = 'Seneste 8 møder i alle udvalg';
+  $handler->display->display_options['title'] = 'Seneste 8 møder i mine udvalg';
   $handler->display->display_options['css_class'] = 'front-page-content-block';
   $handler->display->display_options['use_ajax'] = TRUE;
   $handler->display->display_options['use_more_always'] = FALSE;
@@ -2656,6 +2656,8 @@ os2dagsorden_meeting_views_last_8_meetings_fields_meeting_location($row->nid)
 
   /* Display: Block all meetings */
   $handler = $view->new_display('block', 'Block all meetings', 'block');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Seneste 8 møder i alle udvalg';
   $handler->display->display_options['defaults']['hide_admin_links'] = FALSE;
   $handler->display->display_options['defaults']['access'] = FALSE;
   $handler->display->display_options['access']['type'] = 'php';
@@ -2698,7 +2700,7 @@ os2dagsorden_meeting_views_last_8_meetings_fields_meeting_location($row->nid)
   $handler->display->display_options['filters']['php']['php_filter'] = 'return os2dagsorden_meeting_views_last_8_meetings_block_my_meetings_filter($row->nid);';
   $translatables['seneste_8_m_der_i_de_st_ende_politiske_udvalg_'] = array(
     t('Master'),
-    t('Seneste 8 møder i alle udvalg'),
+    t('Seneste 8 møder i mine udvalg'),
     t('more'),
     t('Apply'),
     t('Gendan'),
@@ -2718,6 +2720,7 @@ os2dagsorden_meeting_views_last_8_meetings_help_text();
     t('Udvalg'),
     t('[field_os2web_meetings_committee]'),
     t('Block all meetings'),
+    t('Seneste 8 møder i alle udvalg'),
     t('Block my meetings'),
   );
   $export['seneste_8_m_der_i_de_st_ende_politiske_udvalg_'] = $view;
