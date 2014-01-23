@@ -206,11 +206,23 @@ function os2dagsorden_blocks_positioning_context_default_contexts() {
   $context->reactions = array(
     'block' => array(
       'blocks' => array(
+        'views-bae826754ab8812775bd594878d7fdb1' => array(
+          'module' => 'views',
+          'delta' => 'bae826754ab8812775bd594878d7fdb1',
+          'region' => 'content',
+          'weight' => '-10',
+        ),
         'views-c8c6c91b397acf23018fcefd40a1fa29' => array(
           'module' => 'views',
           'delta' => 'c8c6c91b397acf23018fcefd40a1fa29',
           'region' => 'content',
-          'weight' => '0',
+          'weight' => '-9',
+        ),
+        'views-0293ca2a3a9d3ff12dd399cf7b0b4333' => array(
+          'module' => 'views',
+          'delta' => '0293ca2a3a9d3ff12dd399cf7b0b4333',
+          'region' => 'content',
+          'weight' => '-8',
         ),
       ),
     ),
