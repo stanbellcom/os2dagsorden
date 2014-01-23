@@ -133,11 +133,12 @@ function os2dagsorden_meeting_views_meeting_details_fields_enddate($meeting_id){
       os2dagsorden_meeting_views_common_meeting_committee($meeting_id);
  }
   function os2dagsorden_meeting_views_meeting_details_fields_type($meeting_id){ 
-   if (variable_get('os2dagsorden_show_meeting_type', true)) 
+   if (variable_get('os2dagsorden_show_meeting_type', true)){ 
       $meeting = node_load($meeting_id);
       $meeting_type=field_get_items('node', $meeting, 'field_os2web_meetings_type');
       print $meeting_type[0]['value'];
  }
+}
  function os2dagsorden_meeting_views_meeting_details_samlet_dokument_link(){
    if (variable_get('os2dagsorden_show_samlet_dokument_link', true)) 
        os2dagsorden_meeting_views_meeting_description_download();
