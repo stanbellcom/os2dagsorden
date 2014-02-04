@@ -72,7 +72,6 @@ function os2dagsorden_file_conversion_manager_pdf_converter_form_submit(&$form_s
  */
 function os2dagsorden_file_conversion_manager_cron() {
     $convertion_dir_path = drupal_realpath(variable_get('os2web_convertion_dir',OS2WEB_CONVERTION_DIR));
-    var_dump(file_exists($convertion_dir_path));
     if (file_exists($convertion_dir_path)===FALSE) {
        watchdog('file convertion managmnet:', 'Folder %uri is not created', array('%uri' => variable_get('os2web_convertion_dir',OS2WEB_CONVERTION_DIR)), WATCHDOG_WARNING);
        return;
