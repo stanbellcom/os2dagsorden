@@ -144,6 +144,22 @@ function os2dagsorden_meeting_views_meeting_details_fields_enddate($meeting_id){
        os2dagsorden_meeting_views_meeting_description_download();
  }
 //////////////////////////////////////////PAGE fields end //////////////////////////////////////////// 
+
+ /////////////////////////////////////////COMMENTS fields START /////////////////////////////////////////
+function os2dagsorden_meeting_views_meeting_details_comments_access(){
+  if (variable_get('os2dagsorden_show_comments', false)) {
+    $q = $_GET['q'];
+    $q = explode('/', $q);
+    $meeting_id = $q[1];
+    $meeting = node_load($meeting_id);
+    if (!empty($meeting->field_os2web_meetings_comments['und'][0]['value']))
+       return TRUE;
+    }
+    return FALSE;
+}
+
+/////////////////////////////////////////COMMENTS fields END /////////////////////////////////////////
+//
 /////////////////////////////////////////DELTOG fields start /////////////////////////////////////////
 function os2dagsorden_meeting_views_meeting_details_fields_participants_deltog($meeting_id){
   $meeting = node_load($meeting_id);
