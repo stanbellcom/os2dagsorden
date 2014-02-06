@@ -330,7 +330,7 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#description' => 'If meeting is not older than the set amount of day, notification is sent. <br/>Otherwise notification process is skipped',
     '#default_value' => variable_get('os2dagsorden_send_timespan_of_notification', 10),
   );
-  if (module_exists('os2dagsorden_file_conversion_manager')) {
+  if (module_exists('os2web_pdf_conversion_manager')) {
     $form['os2dagsorden_file_import'] = array(
       '#type' => 'fieldset',
       '#collapsible' => TRUE,
