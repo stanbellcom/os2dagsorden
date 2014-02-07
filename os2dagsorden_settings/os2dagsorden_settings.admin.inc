@@ -330,6 +330,13 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#description' => 'If meeting is not older than the set amount of day, notification is sent. <br/>Otherwise notification process is skipped',
     '#default_value' => variable_get('os2dagsorden_send_timespan_of_notification', 10),
   );
+  $form['os2dagsorden_meeting_import']['os2dagsorden_default_meeting_cateroty'] = array(
+    '#type' => 'radios',
+    '#title' => t('Default meeting category'),
+    '#default_value' => variable_get('os2dagsorden_default_meeting_cateroty','pol'),
+    '#options' =>  array('pol' => t('Political'), 'org' => t('Organisation')),
+    '#description' => t('This decides whether a default meeting category'),
+  );
   if (module_exists('os2web_pdf_conversion_manager')) {
     $form['os2dagsorden_file_import'] = array(
       '#type' => 'fieldset',
@@ -350,7 +357,14 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
       '#description' => t('This is the path where files copy for converting'),
       '#default_value' => variable_get('os2web_convertion_dir', OS2WEB_CONVERTION_DIR),
     );
-  }
+  }  
+   $form['os2dagsorden_user_default_meeting_category']=array(
+    '#title' => t('Default value for user meeting category'),
+    '#type' => 'checkboxes',
+    '#description' => t('Select default value for user meeting category.'),
+    '#options' => array('pol' => t('Political'), 'org' => t('Organisation')),
+    '#default_value'=>variable_get('os2dagsorden_user_default_meeting_category', array())
+  );
 
   //hidden agenda
   $form['os2dagsorden_hidden_agenda_committee'] = array(
