@@ -337,6 +337,13 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#options' =>  array('pol' => t('Political'), 'org' => t('Organisation')),
     '#description' => t('This decides whether a default meeting category'),
   );
+  $form['os2dagsorden_meeting_import']['os2dagsorden_add_type_prefix'] = array(
+    '#type' => 'radios',
+    '#title' => t('Add prefix to Bilag/Sag bullet point attachments'),
+    '#options' => array('true' => t('Add <i>Bilag/Sag</i> prefix'), 'false' => t('Add no prefix')),
+    '#description' => t('This decides whether the will be added a prefix to Bilag or Case bullet point attachment on import.<br/>e.g. <b>Bilag:</b> Indsigelser of Bemaerkninger.'),
+    '#default_value' => variable_get('os2dagsorden_add_type_prefix', 'true'),
+  );
   if (module_exists('os2web_pdf_conversion_manager')) {
     $form['os2dagsorden_file_import'] = array(
       '#type' => 'fieldset',
