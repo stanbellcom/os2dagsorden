@@ -5,3 +5,4 @@ package = OS2Dagsorden
 php = 5.2.4
 version = 7.x-1.0-alpha
 project = os2dagsorden_settings
+configure = admin/config/os2dagsorden/settings
