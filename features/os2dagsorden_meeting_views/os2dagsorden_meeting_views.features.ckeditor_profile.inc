@@ -37,7 +37,7 @@ function os2dagsorden_meeting_views_ckeditor_profile_defaults() {
 ',
         'uicolor_user' => 'default',
         'toolbar' => '[
-    [\'Format\',\'Bold\',\'Italic\',\'-\',\'NumberedList\',\'BulletedList\',\'-\',\'Link\',\'Unlink\',\'Image\']
+    [\'Bold\',\'Italic\',\'NumberedList\',\'Underline\',\'BulletedList\',\'TextColor\',\'Image\']
 ]',
         'expand' => 't',
         'width' => '100%',
