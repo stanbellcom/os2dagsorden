@@ -134,6 +134,13 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#options' => $options,
     '#description' => t('This decides whether a certain type of bullet point attachment - bilag will be expanded (activated) when functionality "Expand whole bullet point" is executed.'),
   );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_massive_expand_collapse_button'] = array(
+    '#type' => 'radios',
+    '#title' => t('Massive expand/collapse button'),
+    '#default_value' => variable_get('os2dagsorden_show_massive_expand_collapse_button', 'true'),
+    '#options' => array('true' => t('Show'), 'false' => t('Hide')),
+    '#description' => t('This decides whether massive expand/collapse button will be shown on meeting views.'),
+  );
   $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_meeting_enddate'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show meeting end date on meeting view'),
@@ -212,6 +219,13 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#default_value' => variable_get('os2dagsorden_collapse_menu', TRUE),
     '#options' => $options3,
     '#description' => t('This decides whether a side menu expanded/collapsed.'),
+  );
+  $form['os2dagsorden_frontpage_layout_settings']['os2dagsorden_show_search_block_title'] = array(
+    '#type' => 'radios',
+    '#title' => t('Show/Hide search block title'),
+    '#default_value' => variable_get('os2dagsorden_show_search_block_title', 'true'),
+    '#options' => array('true' => t('Show'), 'false' => t('Hide')),
+    '#description' => t('This decides whether a search block title show/hide.'),
   );
   $form['os2dagsorden_frontpage_layout_settings']['os2dagsorden_meetings_views_last_8_show_meeting_committee'] = array(
     '#type' => 'checkbox',
