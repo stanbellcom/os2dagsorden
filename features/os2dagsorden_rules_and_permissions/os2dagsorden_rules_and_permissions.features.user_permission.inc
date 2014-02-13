@@ -90,34 +90,6 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
     ),
     'module' => 'user',
   );
-/*
-  // Exported permission: create os2web_meetings_spaper content.
-  $permissions['create os2web_meetings_spaper content'] = array(
-    'name' => 'create os2web_meetings_spaper content',
-    'roles' => array(
-      0 => 'authenticated user',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: delete own os2web_meetings_spaper content.
-  $permissions['delete own os2web_meetings_spaper content'] = array(
-    'name' => 'delete own os2web_meetings_spaper content',
-    'roles' => array(
-      0 => 'authenticated user',
-    ),
-    'module' => 'node',
-  );
-
-  // Exported permission: edit own os2web_meetings_spaper content.
-  $permissions['edit own os2web_meetings_spaper content'] = array(
-    'name' => 'edit own os2web_meetings_spaper content',
-    'roles' => array(
-      0 => 'authenticated user',
-    ),
-    'module' => 'node',
-  );
-*/
   // Exported permission: use text format filtered_html.
   $permissions['use text format filtered_html'] = array(
     'name' => 'use text format filtered_html',
