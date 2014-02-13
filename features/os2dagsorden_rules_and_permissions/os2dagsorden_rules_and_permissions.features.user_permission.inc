@@ -90,7 +90,7 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
     ),
     'module' => 'user',
   );
-
+/*
   // Exported permission: create os2web_meetings_spaper content.
   $permissions['create os2web_meetings_spaper content'] = array(
     'name' => 'create os2web_meetings_spaper content',
@@ -117,7 +117,7 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
     ),
     'module' => 'node',
   );
-
+*/
   // Exported permission: use text format filtered_html.
   $permissions['use text format filtered_html'] = array(
     'name' => 'use text format filtered_html',
