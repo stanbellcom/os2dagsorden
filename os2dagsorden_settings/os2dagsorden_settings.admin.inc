@@ -206,6 +206,28 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#description' => t('This decides whether a meeting status is visible on meeting search view.'),
     '#default_value' => variable_get('os2dagsorden_meetings_search_show_meeting_status', FALSE),
   );
+  
+   $form['os2dagsorden_sidepane_menu_layout'] = array(
+      '#type' => 'fieldset',
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#title' => t('Sidepane menu layout'),
+  );
+  
+  $form['os2dagsorden_sidepane_menu_layout']['main_menu_links'] = array(
+      '#type' => 'link',
+       '#prefix' => '<p>',
+      '#href' => 'admin/structure/menu/manage/menu-sidepane-menu',
+      '#title' => t('Change order of the main menu links'),
+         '#sufix' => '</p>',
+  );
+   $form['os2dagsorden_sidepane_menu_layout']['sipepane_blocks_order'] = array(
+      '#type' => 'link',
+      '#prefix' => '<p>',
+      '#href' => 'admin/structure/context/list/os2dagsorden_sidepane/edit',
+      '#title' => t('Change order of sidepane blocks'),
+       '#sufix' => '</p>',
+  );
     
    //Meeting import settings
   $form['os2dagsorden_meeting_import'] = array(

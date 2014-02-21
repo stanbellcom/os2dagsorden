@@ -1033,7 +1033,7 @@ os2dagsorden_meeting_views_meeting_details_samlet_dokument_link();
   $handler->display->display_options['fields']['nid_1']['label'] = '';
   $handler->display->display_options['fields']['nid_1']['exclude'] = TRUE;
   $handler->display->display_options['fields']['nid_1']['element_label_colon'] = FALSE;
-  /* Felt: Indhold:  Særlige Forhold */
+  /* Felt: Broken/missing handler */
   $handler->display->display_options['fields']['field_os2web_meetings_conditions']['id'] = 'field_os2web_meetings_conditions';
   $handler->display->display_options['fields']['field_os2web_meetings_conditions']['table'] = 'field_data_field_os2web_meetings_conditions';
   $handler->display->display_options['fields']['field_os2web_meetings_conditions']['field'] = 'field_os2web_meetings_conditions';
@@ -1806,7 +1806,7 @@ os2dagsorden_meeting_views_meeting_details_fields_speaker_paper_link($meeting_id
     t('Kommentarer'),
     t('Bemærkninger'),
     t('Særlige Forhold'),
-    t(' Særlige Forhold'),
+    t('Broken handler field_data_field_os2web_meetings_conditions.field_os2web_meetings_conditions'),
     t('Deltagere'),
     t('Afbud / Fraværende'),
     t('Print all speaker papers'),

@@ -24,8 +24,8 @@ function os2dagsorden_meeting_views_ckeditor_profile_defaults() {
       ),
       'input_formats' => array(),
     ),
-    'OS2dagsoren_filtered' => array(
-      'name' => 'OS2dagsoren_filtered',
+    'OS2dagsorden_filtered' => array(
+      'name' => 'OS2dagsorden_filtered',
       'settings' => array(
         'ss' => '2',
         'default' => 't',
@@ -37,7 +37,7 @@ function os2dagsorden_meeting_views_ckeditor_profile_defaults() {
 ',
         'uicolor_user' => 'default',
         'toolbar' => '[
-    [\'Bold\',\'Italic\',\'NumberedList\',\'Underline\',\'BulletedList\',\'TextColor\',\'Image\']
+    [\'Bold\',\'Italic\',\'Underline\',\'NumberedList\',\'BulletedList\',\'TextColor\',\'Image\']
 ]',
         'expand' => 't',
         'width' => '100%',
@@ -58,7 +58,7 @@ function os2dagsorden_meeting_views_ckeditor_profile_defaults() {
             'pre_indent' => 0,
           ),
         ),
-        'css_mode' => 'none',
+        'css_mode' => 'theme',
         'css_path' => '',
         'css_style' => 'theme',
         'styles_path' => '',
@@ -98,8 +98,8 @@ function os2dagsorden_meeting_views_ckeditor_profile_defaults() {
         'filtered_html' => 'Filtered HTML',
       ),
     ),
-    'OS2dagsoren_full' => array(
-      'name' => 'OS2dagsoren_full',
+    'Os2dagsorden_full' => array(
+      'name' => 'Os2dagsorden_full',
       'settings' => array(
         'ss' => '2',
         'default' => 't',
