@@ -293,32 +293,54 @@ function _os2dagsorden_annotator_check_permission($meeting_id, $bullet_point_id,
  */
 function _os2dagsorden_annotator_view($meeting_id, $bullet_point_id, $bilag_id) {
     $bilag = node_load($bilag_id);
-    if (strcmp($bilag->type, 'os2web_meetings_bullet_attach') == 0) {
-        drupal_add_js(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/annotator-full.min.js');
-        drupal_add_js(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/touch-plugin/annotator.touch.min.js');
-        drupal_add_js(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/json2.js');
 
-        drupal_add_js(drupal_get_path('module', 'os2dagsorden_annotator') . '/js/os2dagsorden_annotator_secure.js');
-        drupal_add_js(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/XPath.js');
-        
-        //floating scrollbar
-        drupal_add_js(drupal_get_path('module', 'os2dagsorden_annotator') . '/js/os2dagsorden_annotator_floatingscrollbar.min.js');
+  global $base_url, $base_path, $user;
+  drupal_add_js(drupal_get_path('module', 'os2dagsorden_annotator') . '/js/os2dagsorden_annotator_secure.js');
+  drupal_add_css(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/annotator-full.min.css');
+  drupal_add_css(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/touch-plugin/annotator.touch.css');
+
+  $html = "";
+
+  //check mode
+  $mode = (isset($_GET['search_param']))? 'search_mode' : 'annotator_mode';
+
+  if ($mode === 'search_mode'){
+    drupal_add_js(drupal_get_path('theme', 'os2dagsorden_theme') . '/js/jquery.highlight.js');
+    $search_param = $_GET['search_param'];
+    drupal_add_js('highlight_wrapper(".node","' . $search_param . '");',  'inline');
+
+    $path_to_annotate = $GLOBALS['base_url'] . '/meeting/' . $meeting_id . '/bullet-point/' . $bullet_point_id . '/bullet-point-attachment/' . $bilag_id;
+    $html .= <<<HTML
+        <div class="annotator-touch-widget annotator-touch-controls">
+          <div class="annotator-touch-widget-inner">
+            <a class="annotator-button annotator-add annotator-focus" href="{$path_to_annotate}">Skift til noter</a>
+          </div>
+        </div>
+HTML;
+  } else {
+    drupal_add_js(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/annotator-full.min.js');
+    drupal_add_js(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/touch-plugin/annotator.touch.min.js');
+    drupal_add_js(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/json2.js');
+    drupal_add_js(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/XPath.js');
+
+    drupal_add_js('add_annotator(' . $meeting_id . ',' . $bullet_point_id . ',' . $bilag_id . ',"#content","' . $base_path . '?q=", true, "' . $user->name . '");', 'inline');
+
+    drupal_add_css(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/annotator-full.min.css');
+    drupal_add_css(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/touch-plugin/annotator.touch.css');
+  }
+
+    //floating scrollbar
+    drupal_add_js(drupal_get_path('module', 'os2dagsorden_annotator') . '/js/os2dagsorden_annotator_floatingscrollbar.min.js');
 	drupal_add_js('annotator_add_floatinscrollbar();', 'inline');
 
-        global $base_url, $base_path, $user;
-        drupal_add_js('add_annotator(' . $meeting_id . ',' . $bullet_point_id . ',' . $bilag_id . ',"#content","' . $base_path . '?q=", true, "' . $user->name . '");', 'inline');
-        
-        //hiding the side pane menu
+    //hiding the side pane menu
 	drupal_add_js('annotator_hide_menu();', 'inline');
 
-	drupal_add_css(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/annotator-full.min.css');
-        drupal_add_css(drupal_get_path('module', 'os2dagsorden_annotator') . '/lib/touch-plugin/annotator.touch.css');
-        
-        //overriding title for bilag
+    //overriding title for bilag
 	drupal_set_title($bilag->title);
 
 	//Help icon
-	$html = '<div class="node">
+	$html .= '<div class="node">
 		<div class="help-button" title="Hvis du ønsker at lave en kommentar til et ord eller et afsnit, så marker blot dette hvorefter du får mulighed for at indtaste kommentaren."></div>
 		<div class="controls-right">';
 		
@@ -384,7 +406,6 @@ function _os2dagsorden_annotator_view($meeting_id, $bullet_point_id, $bilag_id) 
 		  '<div class="clearfix" id="content">' . $text . '</div>' . 
 		  '</div>';
 	}
-    }
 
     return $html;
 }
@@ -634,10 +655,10 @@ function _os2dagsorden_compare_xpath($path1, $path2){
   $path2_el = explode('/', $path2);
   
   //finding the array to start with
-  if (count($path1_el) > count($path1_e2))
+  if (count($path1_el) > count($path2_el))
     $start_with = $path1_el;
   else 
-    $start_with = $path2_e;;
+    $start_with = $path2_el;
     
   for ($i = 0; $i < count($start_with); $i++){
     if (!strpos($path1_el[$i], '[') && !strpos($path2_el[$i], '['))//if none of them have container index 

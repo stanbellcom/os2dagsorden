@@ -266,7 +266,7 @@ function os2dagsorden_pdf2htmlex_convert($fid, $did) {
 	}  else {
 	    db_update('os2dagsorden_pdf2htmlex_files')
 	    ->fields(array(
-	      'progress' => 'file_not_converted',
+	      'progress' => 'Not converted',
 	    ))
 	    ->condition('fid', $fid)
 	    ->condition('did', $did)
@@ -290,7 +290,7 @@ function os2dagsorden_pdf2htmlex_convert($fid, $did) {
   } else {
     db_update('os2dagsorden_pdf2htmlex_files')
       ->fields(array(
-	'progress' => 'file_not_found',
+	'progress' => 'Not found',
       ))
       ->condition('fid', $fid)
       ->condition('did', $did)

@@ -206,6 +206,28 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#description' => t('This decides whether a meeting status is visible on meeting search view.'),
     '#default_value' => variable_get('os2dagsorden_meetings_search_show_meeting_status', FALSE),
   );
+  
+   $form['os2dagsorden_sidepane_menu_layout'] = array(
+      '#type' => 'fieldset',
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#title' => t('Sidepane menu layout'),
+  );
+  
+  $form['os2dagsorden_sidepane_menu_layout']['main_menu_links'] = array(
+      '#type' => 'link',
+       '#prefix' => '<p>',
+      '#href' => 'admin/structure/menu/manage/menu-sidepane-menu',
+      '#title' => t('Change order of the main menu links'),
+         '#sufix' => '</p>',
+  );
+   $form['os2dagsorden_sidepane_menu_layout']['sipepane_blocks_order'] = array(
+      '#type' => 'link',
+      '#prefix' => '<p>',
+      '#href' => 'admin/structure/context/list/os2dagsorden_sidepane/edit',
+      '#title' => t('Change order of sidepane blocks'),
+       '#sufix' => '</p>',
+  );
     
    //Meeting import settings
   $form['os2dagsorden_meeting_import'] = array(
@@ -295,6 +317,7 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
       '#maxlength' => 200,
       '#description' => t('This is the path where files copy for converting'),
       '#default_value' => variable_get('os2web_convertion_dir', OS2WEB_CONVERTION_DIR),
+      '#element_validate' => array('_os2dagsorden_os2web_convertion_dir_validate'),
     );
   }  
   if (module_exists('os2dagsorden_pdf2htmlex')) {
@@ -316,6 +339,7 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
         '#title' => t('Path for HTML files to be rendered'),
         '#default_value' => variable_get('pdf2html_rendering_path', ''),
         '#description' => t('Relative path for HTML files to be rendered by os2dagsorden_pdf2htmlEX module. If empty, the path with the original PDF files will be used.<br/><b>Important!</b> You will need to create the path yourself.'),
+        '#element_validate' => array('_os2dagsorden_pdf2html_rendering_path_validate'),
   );
     }
     $form['os2dagsorden_political_organizational_settings'] = array(
@@ -408,7 +432,8 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#type' => 'checkbox',
     '#default_value' => variable_get('os2dagsorden_pws_use_local_copy'),
     '#title' => t('Use local XML files'),
-    '#description' => variable_get('os2dagsorden_pws_use_local_copy') ? 'Diselect and click save to enable the fields below' : 'Selecting and clicking save will disable the textfields below'
+    '#description' => variable_get('os2dagsorden_pws_use_local_copy') ? 'Diselect and click save to enable the fields below' : 'Selecting and clicking save will disable the textfields below',
+    '#element_validate' => array('_os2dagsorden_sofd_local_copy_validate'),
   );
   $form['os2dagsorden_pws_sofd_group']['os2dagsorden_pws_v_meetings_url'] = array(
     '#type' => 'textfield',
@@ -416,6 +441,7 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#title' => t('Meeting (planned meetings) view url:'),
     '#maxlength' => 256,
     '#disabled' => variable_get('os2dagsorden_pws_use_local_copy'),
+    '#element_validate' => array('_os2dagsorden_url_responce_validate'),
   );
   $form['os2dagsorden_pws_sofd_group']['os2dagsorden_pws_v_meetinggroups_url'] = array(
     '#type' => 'textfield',
@@ -423,6 +449,7 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#title' => t('Meeting groups (is member of/follows/follows+) view url:'),
     '#maxlength' => 256,
     '#disabled' => variable_get('os2dagsorden_pws_use_local_copy'),
+    '#element_validate' => array('_os2dagsorden_url_responce_validate'),
   );
   $form['os2dagsorden_pws_sofd_group']['os2dagsorden_pws_v_acadregroups_url'] = array(
     '#type' => 'textfield',
@@ -430,6 +457,7 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#title' => t('Acadre groups (committees) url:'),
     '#maxlength' => 256,
     '#disabled' => variable_get('os2dagsorden_pws_use_local_copy'),
+    '#element_validate' => array('_os2dagsorden_url_responce_validate'),
   );
   
    return system_settings_form($form);
@@ -442,6 +470,75 @@ function _os2dagsorden_pdf2htmlEX_validate($element, &$form_state){
             form_error($element, "Incorrect pdf2htmlEX path");
             watchdog("os2dagsorden", t('Incorrect pdf2htmlEX path'));
         }
+}
+
+function _os2dagsorden_url_responce_validate($element, &$form_state){
+  $value = $element['#value'];
+
+  if ($value != "") {
+    $url = (strpos($value, "http://") !== 0) ? 'http://' . $value : $value;
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_NOBODY, true);
+    curl_exec($ch);
+    $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    if ($retcode != 200) {
+      form_error($element, "Specified url does not respond.");
+    }
+    curl_close($ch);
+  }
+}
+
+function _os2dagsorden_sofd_local_copy_validate($element, &$form_state){
+  $value = $element['#value'];
+  //if checked
+  if($value == 1){
+    if(is_dir("public://acadre_views"))
+    {
+      //check files in directory
+      $files = array("public://acadre_views/V_web_MeetingGroups.xml",
+        "public://acadre_views/V_web_AcadreGroups.xml",
+        "public://acadre_views/V_web_Meetings.xml",
+      );
+
+      foreach ($files as $file) {
+        if (!file_exists($file)) {
+          form_error($element, "File " . $file . " does not exist.");
+        }
+      }
+
+    }
+    else{
+      form_error($element, "directory public://acadre_views does not exist.");
+    }
+
+  }
+}
+
+function _os2dagsorden_pdf2html_rendering_path_validate($element, &$form_state){
+  $value = $element['#value'];
+  if ($value != "") {
+    if (is_dir($value)) {
+      if (!is_writable($value)) {
+        form_error($element, "Could not writte to directory. Please check permissions");
+      }
+    }
+    else {
+      form_error($element, "Directory does not exist");
+    }
+  }
+}
+
+function _os2dagsorden_os2web_convertion_dir_validate($element, &$form_state){
+  $value = $element['#value'];
+  if(file_exists($value)){
+    if(!is_writable($value)){
+      form_error($element, "Could not writte to directory. Please check permissions");
+    }
+  }else{
+    form_error($element, "Directory " . $value . " does nor exist");
+  }
 }
 
 /**
