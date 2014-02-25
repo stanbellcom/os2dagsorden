@@ -421,8 +421,10 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#title' => t('Frequency of Adlib (* to PDF) conversion cron job'),
   );
   $form['#submit'][] = 'os2dagsorden_settings_cron_job_submit';
-  // SOFD Integration settings
-  $form['os2dagsorden_pws_sofd_group'] = array(
+  
+   // SOFD Integration settings
+  if (module_exists('os2dagsorden_importer')){
+   $form['os2dagsorden_pws_sofd_group'] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
@@ -459,6 +461,7 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#disabled' => variable_get('os2dagsorden_pws_use_local_copy'),
     '#element_validate' => array('_os2dagsorden_url_responce_validate'),
   );
+  } 
   
    return system_settings_form($form);
 }
