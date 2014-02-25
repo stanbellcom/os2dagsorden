@@ -42,7 +42,6 @@ function os2dagsorden_access_helper_menu() {
     'page callback' => 'os2dagsorden_access_helper_logout',
     'access callback' => TRUE,
   );
-
   return $items;
 }
 
@@ -572,27 +571,30 @@ function os2dagsorden_access_helper_delete_user_rights() {
 
   foreach ($users as $user) {
     $full_user = user_load($user->uid);
-    if (isset($full_user->field_user_positions['und'])) {
-      foreach ($full_user->field_user_positions['und'] as $pos_index => $pos) {
-        $pos_full = taxonomy_term_load($pos['tid']);
-        if (isset($pos_full->field_user_pos_valid['und'])) {
-          $valid_until = strtotime($pos_full->field_user_pos_valid['und']['0']['value2']);
+    if (isset($full_user->field_os2web_user_pos['und'])) {
+        $user_role_items = field_get_items('user', $full_user, 'field_os2web_user_pos');
+      foreach ($user_role_items  as $pos_index => $pos) {
+         $pos_full = field_collection_field_get_entity($pos);
+        //$pos_full = taxonomy_term_load($pos['tid']);
+        if (isset($pos_full->field_os2web_user_pos_valid['und'])) {
+          $valid_until = strtotime($pos_full->field_os2web_user_pos_valid['und']['0']['value2']);
           if (strtotime('now') > $valid_until) {
             //deleting user connection to that committee (member of)
             if (isset($full_user->field_user_committee['und'])) {
               foreach ($full_user->field_user_committee['und'] as $com_index => $com) {
-                if ($com['tid'] == $pos_full->field_user_pos_committee['und']['0']['tid']) {
+                if ($com['tid'] == $pos_full->field_os2web_user_pos_committee['und']['0']['tid']) {
                   unset($full_user->field_user_committee['und'][$com_index]);
                 }
               }
             }
 
             //deleting user connection to role
-            unset($full_user->field_user_positions['und'][$pos_index]);
+             entity_delete_multiple('field_collection_item', array($pos['value']));
+              unset($full_user->field_os2web_user_pos['und'][$pos_index]);
 
             user_save($full_user); //save changes
             //deleting the role itself
-            taxonomy_term_delete($pos['tid']);
+           // taxonomy_term_delete($pos['tid']);
           }
         }
       }
