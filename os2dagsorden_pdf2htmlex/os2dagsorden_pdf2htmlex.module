@@ -23,7 +23,77 @@ function os2dagsorden_pdf2htmlex_menu() {
 	'access arguments' => array('administer os2web'),
 	'type' => MENU_CALLBACK,
     );
-    return $items;
+
+  $items['admin/reports/pdf2htmlex'] = array(
+    'title' => 'PDF to HTML',
+    'description' => t("PDF to HTML convertion files and statuses."),
+    'page callback' => 'os2dagsorden_pdf2htmlex_report',
+    'access arguments' => array('administer content'),
+  );
+
+  return $items;
+}
+
+function os2dagsorden_pdf2htmlex_report(){
+  /*
+   * PROGRESS:
+   * NULL - scheduled,
+   * Converted (only converted)
+   * Completed (converted and the node is updated)
+   * Not found (the file which has to be converted is missing)
+   * Not converted (the conversion failed for some reasons)
+   */
+
+  //rechedule
+  if(!empty($_GET['fid'])){
+    $fid = $_GET['fid'];
+    db_update('os2dagsorden_pdf2htmlex_files')
+      ->fields(array(
+        'progress' => null,
+        'filename' => null,
+        'created_filepath' => null,
+      ))
+      ->condition('fid', $fid, '=')
+      ->execute();
+  }
+
+  //table output
+  $result = db_select('os2dagsorden_pdf2htmlex_files', 'o')
+    ->fields('o')
+    ->execute()
+    ->fetchAllAssoc('fid');
+
+  if($result == false){
+    $content['pdf2htmlex-novalues'] = array(
+      '#type' => 'markup',
+      '#markup' => t('No files to convert.'),
+      '#prefix' => '<p>',
+      '#suffix' => '</p>',
+    );
+  }else{
+    $headers = array('File entry fid', 'Destination nid', 'File name', 'HTML path', 'Status', '');
+    $rows = array();
+
+    foreach ($result as $row) {
+      global $base_path;
+      $row->did = '<a href="' . $base_path . 'node/' . $row->did . '">' . $row->did .'</a>';
+      if($row->progress == "") $row->progress = "Scheduled";
+      $r =(array)$row;
+      //action
+      $r[] = '<a href="?fid=' . $row->fid . '">rechedule</a>';
+      $rows[] = array_values($r);
+    }
+
+
+    $content['pdf2htmlex-table'] = array(
+      '#theme' => 'table',
+      '#header' => $headers,
+      '#rows' => $rows,
+    );
+
+  }
+
+  return $content;
 }
 
 function os2dagsorden_pdf2htmlex_do_convert(){
@@ -51,7 +121,6 @@ function os2dagsorden_pdf2htmlex_do_convert(){
  * @param int $fid file id
  * @param int $did node id
  *
- * @return none
  */
 function os2dagsorden_pdf2htmlex_schedule($fid, $did) {
   db_insert('os2dagsorden_pdf2htmlex_files')
@@ -251,7 +320,10 @@ function os2dagsorden_pdf2htmlex_convert($fid, $did) {
 
     //check if already convered
     if(!file_exists($path)){
-	shell_exec(variable_get('os2dagsorden_pdf2htmlex_path') . ' ' . escapeshellarg($file_path_real) . '  --dest-dir ' . escapeshellarg($dest_dir_real) . ' --zoom ' . DEFAULT_PDF_HTML_ZOOM);
+      $shell_file_path_real = "'" . str_replace("'", "\'", $file_path_real) . "'";
+      $shell_dest_dir_real = "'" . str_replace("'", "\'", $dest_dir_real) . "'";
+
+	  shell_exec(variable_get('os2dagsorden_pdf2htmlex_path') . ' ' . $shell_file_path_real . '  --dest-dir ' . $shell_dest_dir_real . ' --zoom ' . DEFAULT_PDF_HTML_ZOOM . ' 2>&1');
 
         //successful conversion?
 	if (file_exists($path)) {
