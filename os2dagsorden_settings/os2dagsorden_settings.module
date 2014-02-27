@@ -47,6 +47,12 @@ function os2dagsorden_settings_menu() {
         'access arguments' => array('administer os2web'),
         'type' => MENU_NORMAL_ITEM,
     );
+    $items['get_committee/autocomplete'] = array(
+    'page callback' => 'committee_autocomplete_callback',
+      'page arguments' => array(2),
+      'access arguments' => array('use autocomplete'),
+    'type' => MENU_CALLBACK,  
+    );
     
     return $items;
 }
@@ -74,3 +80,18 @@ function os2dagsorden_settings_flush_calendar_preferences(){
     drupal_goto('admin/config');
 }
 
+function committee_autocomplete_callback($string = '') {
+    $vid = db_select('taxonomy_vocabulary', 'tv')
+            ->fields('tv', array('vid'))
+            ->condition('machine_name', 'os2web_meetings_tax_committee')
+            ->execute()
+            ->fetchField();
+    $vocabulary_terms = taxonomy_get_tree($vid);
+    $array = drupal_explode_tags($string);
+    $last_string = trim(array_pop($array));
+    $matches = array();
+    $prefix = count($array) ? implode(', ', $array) . ', ' : '';
+    foreach ($vocabulary_terms as $term)
+        $terms[$prefix . $term->name] = $term->name;
+    drupal_json_output($terms);
+}

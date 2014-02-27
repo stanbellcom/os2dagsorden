@@ -78,6 +78,12 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#description' => t('This decides whether a bullet point attachment converted from PDF to HTML is going to be shown in the application.<br/>Can be useful to disable display if users are known to used old browser versions (>IE8).'),
     '#default_value' => variable_get('os2dagsorden_show_bilag', TRUE),
   );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_sager_group_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Sager group title'),
+    '#description'=>t('This decides how a group of Cases/Sager will be titled'),
+    '#default_value' => variable_get('os2dagsorden_sager_group_title', 'Sager'),
+  );
   $form['os2dagsorden_meeting_view_settings']['os2dagsorden_group_closed_bullet_points'] = array(
     '#type' => 'radios',
     '#title' => t('Group closed closed bullet points as a separate block'),
@@ -246,9 +252,10 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
   $form['os2dagsorden_meeting_import']['os2dagsorden_send_notification_committee'] = array(
     '#type' => 'textfield',
     '#title' => 'Send notification of committees',
-    '#maxlength' => 200,
-    '#description' => 'Comma-separated list of committees ID changing status of which should send an email notification.',
-    '#default_value' => variable_get('os2dagsorden_send_notification_committee', ''),
+    '#maxlength' => 250,
+    '#default_value' => variable_get('os2dagsorden_send_notification_committee', FALSE),
+    '#description' => t('Comma-separated list of committees changing status of which should send an email notification.'),
+    '#autocomplete_path' => 'get_committee/autocomplete',
   );
   $form['os2dagsorden_meeting_import']['os2dagsorden_send_email_subject'] = array(
     '#type' => 'textfield',
