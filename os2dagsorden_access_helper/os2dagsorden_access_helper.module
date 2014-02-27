@@ -687,24 +687,29 @@ function os2dagsorden_access_helper_is_touch() {
  *
  * @return $node meeting
  */
-function os2dagsorden_access_helper_node_presave($node) {
+function os2dagsorden_access_helper_node_presave($node) {    
   if ($node->type === 'os2web_meetings_meeting') {
     $status = $node->field_os2web_meetings_type['und'][0]['value'];
     if (strcasecmp($status, 'Dagsorden') == 0 || strcasecmp($status, 'Referat') == 0) {
       $committee_id = $node->field_os2web_meetings_committee['und'][0]['tid'];
       $committee = taxonomy_term_load($committee_id);
 
-      $notification_committees = explode(',', variable_get('os2dagsorden_send_notification_committee'));
+      $notification_committees =array_map('strtolower',array_map('trim',explode(',', variable_get('os2dagsorden_send_notification_committee'))));
       $send_notification = FALSE;
-
-      if (isset($committee->field_os2web_meetings_com_subid['und'])) {
-        foreach ($committee->field_os2web_meetings_com_subid['und'] as $id_raw) {
-          if (in_array(intval($id_raw['value']), $notification_committees)) {
+       if (in_array(strtolower($committee->name), $notification_committees)) {
             $send_notification = TRUE;
-            break;
-          }
-        }
+         }
+         else{
+          if (isset($committee->field_os2web_meetings_com_subid['und'])) {
+            foreach ($committee->field_os2web_meetings_com_subid['und'] as $id_raw) { 
+               if (in_array(intval($id_raw['value']), $notification_committees)) {
+                $send_notification = TRUE;
+                break;
+              }
+           }
+         }
       }
+             
       $days_since_meeting_date = (time() - strtotime($node->field_os2web_meetings_date['und'][0]['value'])) / 60 / 60 / 24;
 
       if ($send_notification && $days_since_meeting_date < variable_get('os2dagsorden_send_timespan_of_notification', ACADRE_MM_DEFAULT_TIMESPAN_OF_NOTIFICATION)) {
