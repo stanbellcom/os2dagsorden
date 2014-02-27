@@ -48,7 +48,7 @@ function os2dagsorden_settings_menu() {
         'type' => MENU_NORMAL_ITEM,
     );
     $items['get_committee/autocomplete'] = array(
-    'page callback' => 'committee_autocomplete_callback',
+    'page callback' => 'os2dagsorden_settings_committee_autocomplete_callback',
       'page arguments' => array(2),
       'access arguments' => array('use autocomplete'),
     'type' => MENU_CALLBACK,  
@@ -80,7 +80,7 @@ function os2dagsorden_settings_flush_calendar_preferences(){
     drupal_goto('admin/config');
 }
 
-function committee_autocomplete_callback($string = '') {
+function os2dagsorden_settings_committee_autocomplete_callback($string = '') {
     $vid = db_select('taxonomy_vocabulary', 'tv')
             ->fields('tv', array('vid'))
             ->condition('machine_name', 'os2web_meetings_tax_committee')
