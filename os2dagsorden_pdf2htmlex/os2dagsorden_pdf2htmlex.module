@@ -511,3 +511,20 @@ function os2dagsorden_pdf2htmlex_hide_unused_pages($html, $startPage, $endPage){
     }
     return $doc->saveHTML();
 }
+/**
+ * Schedules the future pdf convertion for bullet point attachments files
+ *
+ * @param int $fid file id
+ *
+ *
+ */
+function os2dagsorden_pdf2htmlex_schedule_if_bpa($fid){
+    $query = new EntityFieldQuery();
+    $query->entityCondition('entity_type', 'node')
+         ->fieldCondition('field_os2web_meetings_bpa_file', 'fid', $fid, '=');
+    $res = $query->execute();
+    if (!empty($res['node'])) {
+        foreach (array_keys($res['node']) as $nid)
+          os2dagsorden_pdf2htmlex_schedule($fid, $nid);
+    }
+}
