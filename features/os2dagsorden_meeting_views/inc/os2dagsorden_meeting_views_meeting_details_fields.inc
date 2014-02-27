@@ -258,7 +258,7 @@ function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_attachme
     }
     else {
       $bilags = array();
-      
+      $cases = array();
       $all_attachments = array();
       foreach($bullet_point->field_os2web_meetings_attach['und'] as $attachment_id){
 	$hash = $attachment_id['target_id'];
@@ -270,7 +270,10 @@ function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_attachme
 
 	if (!empty($attachment->field_os2web_meetings_bpa_file['und'])){// if is bilag
 	  //saving bilags to the end
-	  $bilags[] = $attachment;
+	 if (stripos($attachment->title, "Bilag") === 0)
+	    $bilags[] = $attachment;
+	  else
+	    $cases[] = $attachment;
 	} else {//not bilag
 	  print '<li class="non-bilag">';
 	  
@@ -305,7 +308,7 @@ function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_attachme
       }
 
       //going through all bilags
-      foreach ($bilags as $attachment){
+      /*foreach ($bilags as $attachment){
 	print '<li class="bilag">';
 	
 	//logic for touch devices
@@ -345,9 +348,115 @@ function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_attachme
 	}
 	print '</li>';
       }
+    }*/
+    if ($bullet_point->title !== 'Bilag' && $bullet_point->title !== 'Sager'){
+	if (!empty($bilags)){
+	  _os2dagsorden_meeting_views_meeting_details_bilag_cases_bullet_point('Bilag', $bilags, $meeting_id, $bp_id);
+	}
+  
+	if (!empty($cases)){
+	  _os2dagsorden_meeting_views_meeting_details_bilag_cases_bullet_point(variable_get('os2dagsorden_sager_group_title', 'Sager'), $cases, $meeting_id, $bp_id);
+	}
+      } else {
+	_os2dasorden_meeting_views_meeting_details_bilag_cases_with_content($bilags, $meeting_id, $bp_id);
+	_os2dasorden_meeting_views_meeting_details_bilag_cases_with_content($cases, $meeting_id, $bp_id);
+      }  
+      
+       print '</div>';
     }
     print '</ul>';
     print '</div>';
+  }
+}
+function _os2dagsorden_meeting_views_meeting_details_bilag_cases_bullet_point($bp_title, $elements, $meeting_id, $bp_id){
+  print '<li class="bilags_cases">';
+  print '<div class="indicator-has-no-notes"></div>';
+  print '<a class="first-child last-child">' . $bp_title. '</a>';
+  print '<div class="bilags_cases_container">';
+
+  //going through all bilags
+  foreach ($elements as $attachment){
+    print '<div class="bilag">';
+    
+    //logic for touch devices
+    if (os2dagsorden_access_helper_is_touch()){
+      if (mb_strlen($attachment->title) > 60)
+	$title = mb_substr($attachment->title, 0, 57) . '...';
+      else
+	$title = $attachment->title;
+    } else {//desktop device
+      if (mb_strlen($attachment->title) > 80)
+	$title = mb_substr($attachment->title, 0, 78) . '...';
+      else
+	$title = $attachment->title;
+    }
+    if ($attachment->field_os2web_meetings_bpa_closed['und'][0]['value'] == 1)
+      print '<div class="indicator-unlocked"></div>';
+      
+    if (!empty($attachment->field_os2web_meetings_bpa_html['und'][0]))
+      $link = $base_url . '/meeting/' . $meeting_id . '/bullet-point/' . $bp_id . '/bullet-point-attachment/' . $attachment->nid;
+    else
+      $link = file_create_url($attachment->field_os2web_meetings_bpa_file['und'][0]['uri']);
+      
+    if (os2dagsorden_access_helper_check_user_can_see_bullet_point_attachment($meeting_id, $bp_id, $attachment->nid)){
+      print '<div id="' . $attachment->nid . '" class="indicator-has-no-notes"></div><a href="' . $link . '" target="_blank" class="first-child last-child">' . $title . '</a>';
+    } else {
+      print '<a class="first-child last-child">' . $title . '</a>';
+    }
+    print '</div>';
+  }
+
+  print '</div>';
+  print '</li>';
+}
+
+function _os2dasorden_meeting_views_meeting_details_bilag_cases_with_content($elements, $meeting_id, $bp_id){
+  //going through all bilags
+  foreach ($elements as $attachment){
+    print '<li class="bilag">';
+    
+    //logic for touch devices
+    if (os2dagsorden_access_helper_is_touch()){
+      if (mb_strlen($attachment->title) > 60)
+	$title = mb_substr($attachment->title, 0, 57) . '...';
+      else
+	$title = $attachment->title;
+    } else {//desktop device
+      if (mb_strlen($attachment->title) > 80)
+	$title = mb_substr($attachment->title, 0, 78) . '...';
+      else
+	$title = $attachment->title;
+    }
+    if ($attachment->field_os2web_meetings_bpa_closed['und'][0]['value'] == 1)
+      print '<div class="indicator-unlocked"></div>';
+      
+    if (!empty($attachment->field_os2web_meetings_bpa_html['und'][0]))
+      $link = $base_url . '/meeting/' . $meeting_id . '/bullet-point/' . $bp_id . '/bullet-point-attachment/' . $attachment->nid;
+    else
+      $link = file_create_url($attachment->field_os2web_meetings_bpa_file['und'][0]['uri']);
+      
+    if (os2dagsorden_access_helper_check_user_can_see_bullet_point_attachment($meeting_id, $bp_id, $attachment->nid)){
+      print '<div id="' . $attachment->nid . '" class="indicator-has-no-notes"></div><a href="' . $link . '" target="_blank" class="first-child last-child">' . $title . '</a>';
+      
+      //attachment text - if any
+      if (!empty($attachment->field_os2web_meetings_bpa_html['und'][0])){
+	//should bilag be visible
+	if (variable_get('os2dagsorden_show_bilag', TRUE)){
+	  print '<div class="attachment_text_container">';
+
+	  print '<div class="attachment_text_trimmed_container ajax-progress bpa-' . $meeting_id . '-' . $bp_id . '-' . $attachment->nid . '">';
+
+	  print 'Vent venligst...<div class="throbber"></div>';
+	  print '</div>';
+	  print('<a class="first-child last-child" href="' . $link . '" target="_blank">Læs mere...</a>');
+
+	  print '</div>';
+	}
+      }
+    } else {
+      print '<a class="first-child last-child">' . $title . '</a>';
+    }
+    print '</li>';
   }
 }
 
