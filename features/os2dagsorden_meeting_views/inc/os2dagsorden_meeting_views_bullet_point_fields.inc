@@ -133,10 +133,11 @@ function os2dagsorden_meeting_views_bullet_point_fields_attachments_and_content(
 
       if (!empty($attachment->field_os2web_meetings_bpa_file['und'])){// if is bilag
 	//saving bilags to the end
-	if (stripos($attachment->title, "Bilag") === 0)
-          $bilags[] = $attachment;
-	else
-	  $cases[] = $attachment;
+	if ($attachment->field_os2web_meetings_bpa_type['und'][0]['value']=='Sager')
+           $cases[] = $attachment;
+        else
+           $bilags[] = $attachment; 
+	 
       } else {//not bilag
 	print '<li class="non-bilag">';      
 	      

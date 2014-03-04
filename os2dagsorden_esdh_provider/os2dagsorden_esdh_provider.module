@@ -31,7 +31,9 @@ function os2dagsorden_esdh_provider_process_enclosure($enclosure, $file){
     $node->field_os2web_meetings_bpa_closed[$node->language][0]['value'] = 1;
   else
     $node->field_os2web_meetings_bpa_closed[$node->language][0]['value'] = 0;
-
+  
+  $node->field_os2web_meetings_bpa_type[$node->language][0]['value']=$enclosure['type'];
+  
   node_submit($node);
   node_save($node);
 

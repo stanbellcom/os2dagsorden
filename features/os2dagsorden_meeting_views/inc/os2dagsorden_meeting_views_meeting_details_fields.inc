@@ -270,10 +270,12 @@ function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_attachme
 
 	if (!empty($attachment->field_os2web_meetings_bpa_file['und'])){// if is bilag
 	  //saving bilags to the end
-	 if (stripos($attachment->title, "Bilag") === 0)
-	    $bilags[] = $attachment;
-	  else
-	    $cases[] = $attachment;
+	 //if (stripos($attachment->title, "Bilag") === 0)
+	if ($attachment->field_os2web_meetings_bpa_type['und'][0]['value']=='Sager')
+           $cases[] = $attachment;
+        else
+           $bilags[] = $attachment; 
+	 
 	} else {//not bilag
 	  print '<li class="non-bilag">';
 	  
@@ -350,10 +352,10 @@ function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_attachme
       }
     }*/
     if ($bullet_point->title !== 'Bilag' && $bullet_point->title !== 'Sager'){
-	if (!empty($bilags)){
+       if (!empty($bilags)){
 	  _os2dagsorden_meeting_views_meeting_details_bilag_cases_bullet_point('Bilag', $bilags, $meeting_id, $bp_id);
 	}
-  
+
 	if (!empty($cases)){
 	  _os2dagsorden_meeting_views_meeting_details_bilag_cases_bullet_point(variable_get('os2dagsorden_sager_group_title', 'Sager'), $cases, $meeting_id, $bp_id);
 	}
