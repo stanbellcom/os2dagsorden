@@ -32,6 +32,7 @@ features[field][] = taxonomy_term-user_position-field_user_pos_id
 features[field][] = taxonomy_term-user_position-field_user_pos_valid
 features[field][] = user-user-field_follows_committee
 features[field][] = user-user-field_follows_committee_plus
+features[field][] = user-user-field_follows_committee_pp
 features[field][] = user-user-field_os2web_user_pos
 features[field][] = user-user-field_user_committee
 features[field][] = user-user-field_user_full_name
