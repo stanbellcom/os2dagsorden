@@ -53,7 +53,7 @@ function os2dagsorden_importer_cronapi($op, $job = NULL) {
  *
  * @return none
  */
-function os2dagsorden_importer_cron() {  
+function os2dagsorden_importer_cron() {
     os2dagsorden_importer_import_user_committees();
     os2dagsorden_importer_import_committees();   
     os2dagsorden_importer_import_meetings();

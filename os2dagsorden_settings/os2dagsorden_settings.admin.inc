@@ -403,7 +403,11 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#default_value' => isset($conf['rules']) ? implode(';', $conf['rules']) : variable_get('ultimate_cron_rule', ULTIMATE_CRON_RULE),
     '#title' => t('Frequency of SOFD import cron job'),
   );
-
+  $form['os2dagsorden_cron_job_freq']['os2dagsorden_importer_cron_button'] = array(
+    '#type' => 'button',
+    '#value' => t('Run now'),
+    '#attributes' => array('onclick' => 'location.href="/admin/ultimate-cron/service/start/os2dagsorden_importer_cron?destination=/admin/config/os2dagsorden/settings"; return false;'),
+  );
   $conf = ultimate_cron_get_settings("os2web_esdh_provider_cron");
   $form['os2dagsorden_cron_job_freq']['os2web_esdh_provider_cron'] = array(
     '#type' => 'select',
@@ -411,7 +415,11 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#default_value' => isset($conf['rules']) ? implode(';', $conf['rules']) : variable_get('ultimate_cron_rule', ULTIMATE_CRON_RULE),
     '#title' => t('Frequency of Acadre import cron job'),
   );
-
+  $form['os2dagsorden_cron_job_freq']['os2web_esdh_provider_cron_button'] = array(
+    '#type' => 'button',
+    '#value' => t('Run now'),
+    '#attributes' => array('onclick' => 'location.href="/admin/ultimate-cron/service/start/os2web_esdh_provider_cron?destination=/admin/config/os2dagsorden/settings"; return false;'),
+  );
   $conf = ultimate_cron_get_settings("os2dagsorden_pdf2htmlex_cron");
   $form['os2dagsorden_cron_job_freq']['os2dagsorden_pdf2htmlex_cron'] = array(
     '#type' => 'select',
@@ -419,13 +427,22 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#default_value' => isset($conf['rules']) ? implode(';', $conf['rules']) : variable_get('ultimate_cron_rule', ULTIMATE_CRON_RULE),
     '#title' => t('Frequency of PDF to HTML conversion cron job'),
   );
-
+  $form['os2dagsorden_cron_job_freq']['os2dagsorden_pdf2htmlex_cron_button'] = array(
+    '#type' => 'button',
+    '#value' => t('Run now'),
+    '#attributes' => array('onclick' => 'location.href="/admin/ultimate-cron/service/start/os2dagsorden_pdf2htmlex_cron?destination=/admin/config/os2dagsorden/settings"; return false;'),
+  );
   $conf = ultimate_cron_get_settings("os2dagsorden_adlib_api_cron");
   $form['os2dagsorden_cron_job_freq']['os2dagsorden_adlib_api_cron'] = array(
     '#type' => 'select',
     '#options' => $options,
     '#default_value' => isset($conf['rules']) ? implode(';', $conf['rules']) : variable_get('ultimate_cron_rule', ULTIMATE_CRON_RULE),
     '#title' => t('Frequency of Adlib (* to PDF) conversion cron job'),
+  );
+   $form['os2dagsorden_cron_job_freq']['os2dagsorden_adlib_api_cron_button'] = array(
+    '#type' => 'button',
+    '#value' => t('Run now'),
+    '#attributes' => array('onclick' => 'location.href="/admin/ultimate-cron/service/start/os2web_adlib_api_cron?destination=/admin/config/os2dagsorden/settings"; return false;'),
   );
   $form['#submit'][] = 'os2dagsorden_settings_cron_job_submit';
   
@@ -561,7 +578,7 @@ function _os2dagsorden_os2web_convertion_dir_validate($element, &$form_state){
  */
 function os2dagsorden_settings_cron_job_submit($form, &$form_state) {
   $input = $form_state['input'];
-
+  
   //os2dagsorden_importer_cron
   $conf = _ultimate_cron_default_settings();
   if (!empty($input['os2dagsorden_importer_cron']) && $input['os2dagsorden_importer_cron'] !== variable_get('ultimate_cron_rule', ULTIMATE_CRON_RULE)) {
