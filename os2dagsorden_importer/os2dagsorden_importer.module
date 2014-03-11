@@ -693,7 +693,7 @@ function _os2dagsorden_importer_add_user_follows_committee_plus_plus($tid, $user
         }
     }
 
-    if (!$user_follows_committee_plus) {
+    if (!$user_follows_committee_plus_plus) {
         $old_list = $user->field_follows_committee_pp;
         $old_list['und'][]['tid'] = $tid;
 
@@ -724,7 +724,7 @@ function _os2dagsorden_importer_unset_user_follows_committee_plus_plus($tid, $us
     }
 
     $edit = array(
-	'field_follows_committee_pp' => $user_follows_plus,
+	'field_follows_committee_pp' => $user_follows_plus_plus,
     );
 
     user_save($user, $edit);
