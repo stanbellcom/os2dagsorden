@@ -91,6 +91,16 @@ function os2dagsorden_rules_and_permissions_user_default_permissions() {
     'module' => 'taxonomy',
   );
 
+  // Exported permission: administer ultimate cron.
+  $permissions['administer ultimate cron'] = array(
+    'name' => 'administer ultimate cron',
+    'roles' => array(
+      0 => 'administrator',
+      1 => 'os2dagsorden admin',
+    ),
+    'module' => 'ultimate_cron',
+  );
+
   // Exported permission: administer users.
   $permissions['administer users'] = array(
     'name' => 'administer users',
