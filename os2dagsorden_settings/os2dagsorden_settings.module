@@ -95,3 +95,9 @@ function os2dagsorden_settings_committee_autocomplete_callback($string = '') {
         $terms[$prefix . $term->name] = $term->name;
     drupal_json_output($terms);
 }
+
+function os2dagsorden_settings_views_pre_render(&$view) {
+  if ($view->name == 'user_committee') {
+    $view->build_info['title'] = variable_get('os2dagsorden_my_committees_block_title', 'Medlem af');
+  }
+}

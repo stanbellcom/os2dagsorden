@@ -114,7 +114,7 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#type' => 'checkbox',
     '#title' => t('Expand all bullets on agenda page load'),
     '#description' => t('This decides whether all bullet points will be expanded on page load'),
-    '#default_value' => variable_get('os2dagsorden_expand_all_bullets', FALSE),
+    '#default_value' => variable_get('os2dagsorden_expand_all_bullets',FALSE),
   );
   $form['os2dagsorden_meeting_view_layout']['os2dagsorden_expand_attachment_onload'] = array(
     '#type' => 'checkbox',
@@ -203,6 +203,12 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#default_value' => variable_get('os2dagsorden_show_search_block_title', 'true'),
     '#options' => array('true' => t('Show'), 'false' => t('Hide')),
     '#description' => t('This decides whether a search block title show/hide.'),
+  );
+  $form['os2dagsorden_frontpage_layout']['os2dagsorden_my_committees_block_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Title of my committees block'),
+    '#default_value' => variable_get('os2dagsorden_my_committees_block_title', 'Medlem af'),
+    '#description' => t('This set a title of a block listing all committees user is a member of.'),
   );
  
   //meeting search view settings
