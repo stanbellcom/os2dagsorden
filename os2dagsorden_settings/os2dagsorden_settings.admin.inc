@@ -140,6 +140,18 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#options' => array('true' => t('Show'), 'false' => t('Hide')),
     '#description' => t('This decides whether massive expand/collapse button will be shown on meeting views.'),
   );
+   $form['os2dagsorden_meeting_view_layout']['os2dagsorden_show_bilag_bullet_point'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show bilags under Bilag bullet point'),
+    '#description' => t('This decides whether all bilags grouped under Bilag bullet point'),
+    '#default_value' => variable_get('os2dagsorden_show_bilag_bullet_point', FALSE),
+  );
+   $form['os2dagsorden_meeting_view_layout']['os2dagsorden_show_case_bullet_point'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show cases under Case bullet point'),
+    '#description' => t('This decides whether all Cases/Sager grouped under Cases bullet point '),
+    '#default_value' => variable_get('os2dagsorden_show_case_bullet_point', FALSE),
+  );
   
    //show latest meetings in my committee or all committees
   $form['os2dagsorden_latest_meetings_view_settings'] = array(
