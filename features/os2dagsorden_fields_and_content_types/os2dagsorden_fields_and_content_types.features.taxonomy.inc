@@ -9,14 +9,6 @@
  */
 function os2dagsorden_fields_and_content_types_taxonomy_default_vocabularies() {
   return array(
-    'committee' => array(
-      'name' => 'Committee',
-      'machine_name' => 'committee',
-      'description' => 'Udvalg',
-      'hierarchy' => '0',
-      'module' => 'taxonomy',
-      'weight' => '0',
-    ),
     'user_position' => array(
       'name' => 'User position',
       'machine_name' => 'user_position',
