@@ -177,3 +177,32 @@ function os2dagsorden_esdh_provider_node_delete($node){
     }
   }
 }
+
+/**
+ * Appends word "Tillægsdagsorden" to the bullet title if bullet is of type additional dagsorden
+ *
+ * @param $node
+ * @param $is_additional
+ * @return mixed
+ */
+function os2dagsorden_esdh_provider_handle_additional_bullet($node, $is_additional){
+  if ($is_additional){
+    $node->title = 'Tillægsdagsorden: ' . $node->title;
+  }
+  return $node;
+}
+
+/**
+ * Appends word "Tillægsdagsorden" to the meeting title if meeting is of type additional dagsorden
+ *
+ * @param $node
+ * @param $agenda_name
+ * @return mixed
+ */
+function os2dagsorden_esdh_provider_handle_additional_meeting($node, $agenda_name){
+  if (stripos($agenda_name, 'tillæg') !== FALSE){
+    $node->title = 'Tillægsdagsorden: ' . $node->title;
+    //$node->title = $agenda_name . ' ' . $node->title;
+  }
+  return $node;
+}
