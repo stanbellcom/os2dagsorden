@@ -25,8 +25,36 @@ function os2dagsorden_importer_menu() {
         'access arguments' => array('administer os2web'),
         'type' => MENU_CALLBACK,
     );
+    $items['admin/config/os2web/importer'] = array(
+        'title' => 'SOFD importer',
+        'access arguments' => array('administer os2web'),
+        'page callback' => '_os2dagsorden_importer_page_callback',
+        'type' => MENU_LOCAL_TASK,
+        'position' => 'left',
+        'weight' => -200,
+    );
    
     return $items;
+}
+
+function _os2dagsorden_importer_page_callback() {
+    return theme('table', array('header' => $head, 'rows' => $rows)) .
+            '<h2>' . t('Run SOFD importer') . '</h2>' .
+            render(drupal_get_form('_os2dagsorden_importer_form'));
+}
+
+function _os2dagsorden_importer_form() {
+    $form = array();
+    $form['run'] = array(
+        '#type' => 'submit',
+        '#value' => t('Run SOFD importer'),
+    );
+    return $form;
+}
+
+function _os2dagsorden_importer_form_submit(&$form_state, $form) {
+  os2dagsorden_importer_import_user_committees_improved();
+  drupal_set_message('User rights updated successfully','status' );
 }
 
 /**
@@ -35,8 +63,8 @@ function os2dagsorden_importer_menu() {
  * @return none
  */
 function os2dagsorden_importer_sync() {
-    os2dagsorden_importer_import_user_committees();
-    //os2dagsorden_importer_import_committees();
+   os2dagsorden_importer_import_user_committees_improved();
+    //os2dagsorden_importer_import_user_committees();
     //os2dagsorden_importer_import_committees();
     //os2dagsorden_importer_import_meetings();
 }
@@ -53,11 +81,15 @@ function os2dagsorden_importer_cronapi($op, $job = NULL) {
  *
  * @return none
  */
-function os2dagsorden_importer_cron() {  
+function os2dagsorden_importer_cron() {
     os2dagsorden_importer_import_user_committees();
     os2dagsorden_importer_import_committees();   
     os2dagsorden_importer_import_meetings();
     
+}
+function os2dagsorden_importer_import_user_committees_improved(){
+  $userCommittees=  os2dagsorden_importer_load_user_committees_from_xml(); 
+  _os2dagsorden_importer_process_user_committees_improved($userCommittees);  
 }
 
 /**
@@ -66,6 +98,11 @@ function os2dagsorden_importer_cron() {
  * @return none
  */
 function os2dagsorden_importer_import_user_committees() {
+   $userCommittees=  os2dagsorden_importer_load_user_committees_from_xml(); 
+   _os2dagsorden_importer_process_user_committees($userCommittees);
+}
+
+function os2dagsorden_importer_load_user_committees_from_xml(){
     if (!variable_get('os2dagsorden_pws_use_local_copy')){
       $url = curl_init(variable_get('os2dagsorden_pws_v_meetinggroups_url'));
 
@@ -81,7 +118,7 @@ function os2dagsorden_importer_import_user_committees() {
     } else {
       $userCommittees = simplexml_load_file(DEFAULT_ACADRE_VIEWS_IMPORT_DIR . '/V_web_MeetingGroups.xml');
     }
-    _os2dagsorden_importer_process_user_committees($userCommittees);
+    return $userCommittees;
 }
 
 /**
@@ -139,7 +176,16 @@ function os2dagsorden_importer_import_meetings() {
  *
  * @return none
  */
-function _os2dagsorden_importer_process_user_committees($xml_file) {
+
+function _os2dagsorden_importer_process_user_committees($xml_file){
+  _os2dagsorden_importer_process_user_committees_update($xml_file);  
+}
+
+function _os2dagsorden_importer_process_user_committees_improved($xml_file){
+  _os2dagsorden_importer_process_user_committees_update($xml_file);  
+  _os2dagsorden_importer_process_user_committees_delete($xml_file);
+}
+function _os2dagsorden_importer_process_user_committees_update($xml_file) {
     $result = $xml_file->xpath('//Row');
 
     foreach ($result as $row) {
@@ -153,6 +199,9 @@ function _os2dagsorden_importer_process_user_committees($xml_file) {
             'follower_plus_id' => (int) array_shift($row->xpath('FollowerPlusID')),
             'follower_plus_initials' => (string) array_shift($row->xpath('FollowerPlusInitials')),
             'follower_plus_name' => (string) array_shift($row->xpath('FollowerPlusName')),
+            'follower_plus_plus_id' => (int) array_shift($row->xpath('FollowerPlusPlusID')),
+            'follower_plus_plus_initials' => (string) array_shift($row->xpath('FollowerPlusPlusInitials')),
+            'follower_plus_plus_name' => (string) array_shift($row->xpath('FollowerPlusPlusName')),
             'member_id' => (int) array_shift($row->xpath('MemberID')),
             'member_name' => (string) array_shift($row->xpath('MemberName')),
             'member_start_date' => (string) array_shift($row->xpath('MemberStartDate')),
@@ -217,6 +266,23 @@ function _os2dagsorden_importer_process_user_committees($xml_file) {
                 $user = user_load_by_name($xml_data['follower_plus_initials']);
             }
         }
+        
+        //trying to get user from "Follows++" association 
+        if ($xml_data['follower_plus_plus_id'] != 0) {
+            $query = new EntityFieldQuery();
+            $query->entityCondition('entity_type', 'user')
+                    ->fieldCondition('field_user_id', 'value', intval($xml_data['follower_plus_plus_id']), '=');
+
+            $result = $query->execute();
+            if (isset($result['user'])) {
+                $uids = array_keys($result['user']);
+                $user = reset(entity_load('user', $uids));
+            }
+
+            if (empty($user)) {
+                $user = user_load_by_name($xml_data['follower_plus_plus_initials']);
+            }
+        }
                   
         //if the entry is not deleted
         if ($xml_data['deactivated'] == 0) {
@@ -239,6 +305,10 @@ function _os2dagsorden_importer_process_user_committees($xml_file) {
                         //add user follows committee PLUS
                         _os2dagsorden_importer_add_user_follows_committee_plus($com_tid, $user);
                     }
+                    if ($xml_data['follower_plus_plus_id'] != 0 && !empty($user)) {
+                        //add user follows committee PLUS
+                        _os2dagsorden_importer_add_user_follows_committee_plus_plus($com_tid, $user);
+                    }
                 }
             }
             if (!empty($user)) {
@@ -256,6 +326,12 @@ function _os2dagsorden_importer_process_user_committees($xml_file) {
                 if (!empty($xml_data['follower_plus_name'])) {
                     if (strcmp($user->field_user_full_name['und'][0]['value'], $xml_data['follower_plus_name']) != 0) {
                         _os2dagsorden_importer_set_user_fullname($user, $xml_data['follower_plus_name']);
+                    }
+                }
+                
+                 if (!empty($xml_data['follower_plus_plus_name'])) {
+                    if (strcmp($user->field_user_full_name['und'][0]['value'], $xml_data['follower_plus_plus_name']) != 0) {
+                        _os2dagsorden_importer_set_user_fullname($user, $xml_data['follower_plus_plus_name']);
                     }
                 }
 
@@ -288,6 +364,11 @@ function _os2dagsorden_importer_process_user_committees($xml_file) {
                         //unset follows committee PLUS
                         _os2dagsorden_importer_unset_user_follows_committee_plus($com_tid, $user);
                     }
+                    
+                    if ($xml_data['follower_plus_plus_id'] != 0 && !empty($user)) {
+                        //unset follows committee PLUS
+                        _os2dagsorden_importer_unset_user_follows_committee_plus_plus($com_tid, $user);
+                    }
                 }
             }
             //deleting role  
@@ -295,6 +376,95 @@ function _os2dagsorden_importer_process_user_committees($xml_file) {
                 _os2dagsorden_importer_delete_user_role($xml_data['user_pos_id'], $user);
         }
     }
+}
+
+function _os2dagsorden_importer_process_user_committees_delete($xml_file){
+ $users = db_select('users', 'u')
+    ->fields('u', array('uid', 'name'))
+    ->execute()
+    ->fetchAll();
+
+ foreach ($users as $user) {
+    $full_user = user_load($user->uid);
+    $userFollowerCommittees = Array();
+    $userFollowerPlusCommittees = Array();
+    $userFollowerPlusPlusCommittees = Array();
+    $userMemberOfCommittees = Array();
+    $userSystemID = Array();
+    
+    //user MemberOf Committee
+    $result=$xml_file->xpath('//Row[MemberInitials="' . $user->name . '"]');
+    //var_dump($result);
+    foreach($result as $xml_data){
+      $userSystemID[] = (int) array_shift($xml_data->xpath('SystemID'));
+      $com_term = _os2dagsorden_importer_get_committee_by_id((int) array_shift($xml_data->xpath('GroupID')));
+       if (isset($com_term)) 
+        $userMemberOfCommittees[] = $com_term->tid; 
+    
+    }
+    //user Follower Committee
+    $result=$xml_file->xpath('//Row[FollowerInitials="'.$user->name.'"]');
+    foreach($result as $xml_data){
+      $userSystemID[] = (int) array_shift($xml_data->xpath('SystemID'));  
+      $com_term = _os2dagsorden_importer_get_committee_by_id((int) array_shift($xml_data->xpath('GroupID')));
+       if (isset($com_term)) 
+        $userFollowerCommittees[] = $com_term->tid;
+    }
+    //user Follower Plus Committee
+    $result=$xml_file->xpath('//Row[FollowerPlusInitials="'.$user->name.'"]');
+    foreach($result as $xml_data){
+      $userSystemID[] = (int) array_shift($xml_data->xpath('SystemID'));  
+      $com_term = _os2dagsorden_importer_get_committee_by_id((int) array_shift($xml_data->xpath('GroupID')));
+       if (isset($com_term)) 
+        $userFollowerPlusCommittees[] = $com_term->tid;
+    }
+    //user Follower PlusPlus Committee
+    $result=$xml_file->xpath('//Row[FollowerPlusPlusInitials="'.$user->name.'"]');
+    foreach($result as $xml_data){
+      $userSystemID[] = (int) array_shift($xml_data->xpath('SystemID'));  
+      $com_term = _os2dagsorden_importer_get_committee_by_id((int) array_shift($xml_data->xpath('GroupID')));
+       if (isset($com_term)) 
+        $userFollowerPlusPlusCommittees[] = $com_term->tid;
+    }
+   if (isset($full_user->field_user_committee['und'])) {
+   foreach ($full_user->field_user_committee['und'] as $com) { 
+    if (!in_array($com['tid'], $userMemberOfCommittees)){
+     //unset is part of
+      _os2dagsorden_importer_unset_committee_from_user($com['tid'], $full_user); }       
+    }
+   }
+  if (isset($full_user->field_follows_committee['und'])) {
+   foreach ($full_user->field_follows_committee['und'] as $com) {  
+    if (!in_array($com['tid'], $userFollowerCommittees)){
+     //unset is part of
+     _os2dagsorden_importer_unset_user_follows_committee($com['tid'], $full_user); 
+    }
+   }
+  }
+   if (isset($full_user->field_follows_committee_plus['und'])) {
+   foreach ($full_user->field_follows_committee_plus['und'] as $com) {        
+    if (!in_array($com['tid'], $userFollowerPlusCommittees))
+     //unset is part of
+     _os2dagsorden_importer_unset_user_follows_committee_plus($com['tid'], $full_user);        
+    }
+   }
+   if (isset($full_user->field_follows_committee_pp['und'])) {
+   foreach ($full_user->field_follows_committee_pp['und'] as $com) {        
+    if (!in_array($com['tid'], $userFollowerPlusPlusCommittees))
+     //unset is part of
+     _os2dagsorden_importer_unset_user_follows_committee_plus_plus($com['tid'], $full_user);        
+    }
+   }
+   $user_role_items = field_get_items('user', $full_user, 'field_os2web_user_pos');
+    if (is_array($user_role_items)) {
+    foreach ($user_role_items as $item) {
+     $currnet_role_item = field_collection_field_get_entity($item);
+     $pos_id = intval($currnet_role_item->field_os2web_user_pos_id['und'][0]['value']);
+     if (!in_array($pos_id, $userSystemID))
+      _os2dagsorden_importer_delete_user_role($pos_id, $full_user);
+    }
+  }
+ }
 }
 
 /**
@@ -327,7 +497,6 @@ function _os2dagsorden_importer_update_meeting_category($user, $category) {
       }
     }
     $user->field_user_meetings_category['und'][]['value'] = strtolower($category);
-    
     user_save($user);
 }
 
@@ -643,6 +812,60 @@ function _os2dagsorden_importer_unset_user_follows_committee_plus($tid, $user) {
 
     $edit = array(
 	'field_follows_committee_plus' => $user_follows_plus,
+    );
+
+    user_save($user, $edit);
+}
+/**
+ * Helper function. Adds the follows++ committee to the user
+ *
+ * @param int   $tid  role id
+ * @param mixed $user user object
+ *
+ * @return none
+ */
+function _os2dagsorden_importer_add_user_follows_committee_plus_plus($tid, $user) {
+    $user_follows_committee_plus_plus = FALSE;
+    if (isset($user->field_follows_committee_pp['und'])) {
+        foreach ($user->field_follows_committee_pp['und'] as $committee_id) {
+            if ($tid == $committee_id['tid']) {
+                $user_follows_committee_plus_plus = TRUE;
+            }
+        }
+    }
+
+    if (!$user_follows_committee_plus_plus) {
+        $old_list = $user->field_follows_committee_pp;
+        $old_list['und'][]['tid'] = $tid;
+
+        $edit = array(
+            'field_follows_committee_pp' => $old_list,
+        );
+
+        user_save($user, $edit);
+    }
+}
+
+/**
+ * Helper function. Unsets the follows+ committee to the user
+ *
+ * @param int   $tid  role id
+ * @param mixed $user user object
+ *
+ * @return none
+ */
+function _os2dagsorden_importer_unset_user_follows_committee_plus_plus($tid, $user) {
+    $user_follows_plus_plus = array();
+    if (isset($user->field_follows_committee_pp['und'])) {
+        foreach ($user->field_follows_committee_pp['und'] as $committee_id) {
+            if ($tid != $committee_id['tid']) {
+                $user_follows_plus_plus['und'][]['tid'] = $committee_id['tid'];
+            }
+        }
+    }
+
+    $edit = array(
+	'field_follows_committee_pp' => $user_follows_plus_plus,
     );
 
     user_save($user, $edit);
