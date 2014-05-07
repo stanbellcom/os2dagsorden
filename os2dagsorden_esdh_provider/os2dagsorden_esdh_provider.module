@@ -18,7 +18,7 @@ function os2dagsorden_esdh_provider_process_enclosure($enclosure, $file){
 
   node_object_prepare($node);
 
-  if (variable_get('os2dagsorden_add_type_prefix', 'true') === 'true')
+  if (variable_get('os2dagsorden_add_type_prefix', 'true') === 'true'  && !isset($enclosure['is_bp_summary']))
       $node->title = $enclosure['type'].': ' . $enclosure['title'];
  else
      $node->title = $enclosure['title'];
