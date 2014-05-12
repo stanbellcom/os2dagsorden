@@ -129,7 +129,6 @@ function os2dagsorden_esdh_provider_process_closed_bullet($node, $item){
 
   // Gather enclosures.
   foreach ($item['enclosures'] as $enclosure) {
-    if ($enclosure['access']) {
       if ($file = _os2web_esdh_provider_import_file($enclosure)) {
         $node->field_os2web_meetings_enclosures[LANGUAGE_NONE][] = (array) $file;
         $node->field_os2web_meetings_attach[LANGUAGE_NONE][]['target_id'] = os2dagsorden_esdh_provider_process_enclosure($enclosure, $file);
@@ -137,7 +136,6 @@ function os2dagsorden_esdh_provider_process_closed_bullet($node, $item){
       else {
         watchdog('acadre MM', 'There was an error importing file %uri ', array('%uri' => $enclosure['uri']), WATCHDOG_ERROR);
       }
-    }
   }
 
   return $node;
@@ -205,4 +203,12 @@ function os2dagsorden_esdh_provider_handle_additional_meeting($node, $agenda_nam
     //$node->title = $agenda_name . ' ' . $node->title;
   }
   return $node;
+}
+/**
+ * return TRUE if closed attachments must be imported
+ *
+ * @return boolean
+ */
+function os2dagsorden_esdh_provider_import_closed_attachment () {
+    return TRUE;
 }
