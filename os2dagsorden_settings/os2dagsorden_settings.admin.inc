@@ -72,6 +72,12 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
    '#description'=>t('This decides whether a comments field is visible on meeting view.'),
    '#default_value' => variable_get('os2dagsorden_show_comments', false),
   );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_closed_bullet_point_content'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Show closed bullet point content on directly on meeting view'),
+    '#description' => t('This decides whether a closed bullet point content will shown the same way as open bullet point - directly on the meeting view.'),
+    '#default_value' => variable_get('os2dagsorden_show_closed_bullet_point_content', FALSE),
+  );
   $form['os2dagsorden_meeting_view_settings']['os2dagsorden_show_bilag'] = array(
     '#type' => 'checkbox',
     '#title' => t('Show bullet point attachment (bilag) on meeting view and bullet point attachment views'),
