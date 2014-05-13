@@ -249,10 +249,10 @@ function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_attachme
   if (isset($bullet_point->field_os2web_meetings_attach['und'])){
     print '<div class="item-list">';
     print '<ul class="ul-item-list-dagsordenspunkt">';
-    if ($bullet_point->field_os2web_meetings_bul_closed['und'][0]['value'] == 1 && !os2dagsorden_show_closed_bullet_point_content($meeting_id, $bp_id)){
+    if ($bullet_point->field_os2web_meetings_bul_closed['und'][0]['value'] == 1 && !os2dagsorden_meeting_views_meeting_details_show_closed_bullet_point_content($meeting_id, $bp_id)){
       print "<i>Dagsordenpunktets indhold er skjult fordi dagsordenspunktet er lukket. 
       Klik på dagsordenspunktets overskrift for at få indeholdet frem.</i>";
-    } else if ($bullet_point->field_os2web_meetings_bul_pers['und'][0]['value'] == 1 && !os2dagsorden_show_closed_bullet_point_content($meeting_id, $bp_id)) {
+    } else if ($bullet_point->field_os2web_meetings_bul_pers['und'][0]['value'] == 1 && !os2dagsorden_meeting_views_meeting_details_show_closed_bullet_point_content($meeting_id, $bp_id)) {
       print "<i>Dagsordenpunktets indhold er skjult fordi dagsordenspunktet er et personpunkt. 
       Klik på dagsordenspunktets overskrift for at få indeholdet frem.</i>";
     }
@@ -532,7 +532,7 @@ function os2dagsorden_meeting_views_meeting_details_fields_filter_bullet_point($
   }
 }
 
-function os2dagsorden_show_closed_bullet_point_content($meeting_id, $bp_id){
+function os2dagsorden_meeting_views_meeting_details_show_closed_bullet_point_content($meeting_id, $bp_id){
  if (variable_get('os2dagsorden_show_closed_bullet_point_content', FALSE) && os2dagsorden_access_helper_check_user_can_see_bullet_point($meeting_id, $bp_id))
    return TRUE;
  return FALSE;
