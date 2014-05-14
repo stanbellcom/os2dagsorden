@@ -318,13 +318,13 @@ function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_attachme
       else{
       if (!empty($bilags)){
            if (variable_get('os2dagsorden_show_bilag_bullet_point', FALSE))
-              _os2dagsorden_meeting_views_meeting_details_bilag_cases_bullet_point('Bilag', $bilags, $meeting_id, $bp_id);
+              _os2dagsorden_meeting_views_meeting_details_bilag_cases_bullet_point('Bilag', $bilags, $meeting_id, $bp_id, 'bilags');
            else
               _os2dagsorden_meeting_views_meeting_details_bilag_cases($bilags, $meeting_id, $bp_id);
       }
    	if (!empty($cases)){
             if (variable_get('os2dagsorden_show_case_bullet_point', FALSE))              
-           _os2dagsorden_meeting_views_meeting_details_bilag_cases_bullet_point(variable_get('os2dagsorden_sager_group_title', 'Sager'), $cases, $meeting_id, $bp_id);
+           _os2dagsorden_meeting_views_meeting_details_bilag_cases_bullet_point(variable_get('os2dagsorden_sager_group_title', 'Sager'), $cases, $meeting_id, $bp_id, 'cases');
             else
             _os2dagsorden_meeting_views_meeting_details_bilag_cases($cases, $meeting_id, $bp_id);  
                                
@@ -391,8 +391,8 @@ function _os2dagsorden_meeting_views_meeting_details_bilag_cases( $elements, $me
       }
     }
 
-function _os2dagsorden_meeting_views_meeting_details_bilag_cases_bullet_point($bp_title, $elements, $meeting_id, $bp_id){
-  print '<li class="bilags_cases">';
+function _os2dagsorden_meeting_views_meeting_details_bilag_cases_bullet_point($bp_title, $elements, $meeting_id, $bp_id, $attachment_type){
+  print '<li class="bilags_cases ' . $attachment_type. '">';
   print '<div class="indicator-has-no-notes"></div>';
   print '<a class="first-child last-child">' . $bp_title. '</a>';
   print '<div class="bilags_cases_container">';
