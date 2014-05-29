@@ -27,7 +27,7 @@ function os2dagsorden_meeting_views_ckeditor_profile_defaults() {
     'OS2dagsorden_filtered' => array(
       'name' => 'OS2dagsorden_filtered',
       'settings' => array(
-        'ss' => '2',
+        'ss' => 2,
         'default' => 't',
         'show_toggle' => 't',
         'skin' => 'kama',
@@ -66,7 +66,7 @@ function os2dagsorden_meeting_views_ckeditor_profile_defaults() {
         'filebrowser_image' => '',
         'filebrowser_flash' => '',
         'ckeditor_load_method' => 'ckeditor.js',
-        'ckeditor_load_time_out' => '0',
+        'ckeditor_load_time_out' => 0,
         'forcePasteAsPlainText' => 'f',
         'html_entities' => 't',
         'scayt_autoStartup' => 'f',
@@ -101,7 +101,7 @@ function os2dagsorden_meeting_views_ckeditor_profile_defaults() {
     'Os2dagsorden_full' => array(
       'name' => 'Os2dagsorden_full',
       'settings' => array(
-        'ss' => '2',
+        'ss' => 2,
         'default' => 't',
         'show_toggle' => 'f',
         'skin' => 'kama',
@@ -153,7 +153,7 @@ function os2dagsorden_meeting_views_ckeditor_profile_defaults() {
         'filebrowser_image' => '',
         'filebrowser_flash' => '',
         'ckeditor_load_method' => 'ckeditor.js',
-        'ckeditor_load_time_out' => '0',
+        'ckeditor_load_time_out' => 0,
         'forcePasteAsPlainText' => 'f',
         'html_entities' => 't',
         'scayt_autoStartup' => 'f',
