@@ -868,6 +868,24 @@ function os2dagsorden_access_helper_node_presave($node) {
 }
 
 /**
+ *
+
+/**
+ * Hook to node insert.
+ * The function checks the committee of the meeting, and if it matched with the selected committeed for Budget in the settings,
+ * then this meeting is considered as the right Budget meeting and the custom URL is updated to point to it.
+ */
+function os2dagsorden_access_helper_node_insert($node){
+  if ($node->type === 'os2web_meetings_meeting'){
+    if ($node->field_os2web_meetings_committee['und'][0]['tid'] == variable_get('os2dagsorden_budget_committee', FALSE)){
+      $path['source'] = 'meeting/' . $node->nid;
+      $path['alias'] = 'budget';
+      path_save($path);
+    }
+  }
+}
+
+/**
  * Function determines whether user should or should not be shown a special Byradet link.
  * Only members or followers+ will be shown the meeting
  *

@@ -244,7 +244,8 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#default_value' => variable_get('os2dagsorden_meetings_search_show_meeting_status', FALSE),
   );
   
-   $form['os2dagsorden_sidepane_menu_layout'] = array(
+  // sidemenu layout settings
+  $form['os2dagsorden_sidepane_menu_layout'] = array(
       '#type' => 'fieldset',
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
@@ -258,15 +259,34 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
       '#title' => t('Change order of the main menu links'),
          '#sufix' => '</p>',
   );
-   $form['os2dagsorden_sidepane_menu_layout']['sipepane_blocks_order'] = array(
+  $form['os2dagsorden_sidepane_menu_layout']['sipepane_blocks_order'] = array(
       '#type' => 'link',
       '#prefix' => '<p>',
       '#href' => 'admin/structure/context/list/os2dagsorden_sidepane/edit',
       '#title' => t('Change order of sidepane blocks'),
        '#sufix' => '</p>',
   );
-    
-   //Meeting import settings
+  $vid = db_select('taxonomy_vocabulary', 'tv')
+            ->fields('tv', array('vid'))
+            ->condition('machine_name', 'os2web_meetings_tax_committee')
+            ->execute()
+            ->fetchField();
+
+  $committees = taxonomy_get_tree($vid);
+  foreach ($committees as $committee){
+    $options_committee[$committee->tid] = $committee->name;
+  }
+  
+  $form['os2dagsorden_sidepane_menu_layout']['os2dagsorden_budget_committee'] = array(
+    '#type' => 'select',
+    '#title' => t('Select a committee which meeting will be available in <b>Budget</b> menu link'),
+    '#description' => t('This decides committee will update the meeting link in Budget menu link in the side panel'),
+    '#options' => $options_committee,
+    '#empty_option' => t('- None - '),
+    '#default_value' => variable_get('os2dagsorden_budget_committee', FALSE),
+  );
+
+  //Meeting import settings
   $form['os2dagsorden_meeting_import'] = array(
     '#type' => 'fieldset',
     '#collapsible' => TRUE,
