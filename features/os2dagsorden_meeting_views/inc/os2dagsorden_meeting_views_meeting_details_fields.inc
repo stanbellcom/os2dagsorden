@@ -93,6 +93,25 @@ function os2dagsorden_meeting_views_meeting_details_description_download(){
     echo '<div class="clearfix"></div>';
   }
 }
+
+function os2dagsorden_meeting_views_meeting_details_admin_controls(){
+  if (user_access('administer os2web')){
+    global $base_url;
+    $q = explode('/',$_GET['q']);
+    $meeting_id = $q[1];
+  
+    //edit button
+    echo '<div class="controls-left">';
+    echo '<a href="' . $base_url . '?q=node/' . $meeting_id . '/edit" class="form-submit">Afpublicer møde</a>';
+    echo '</div>';
+  
+    //import form
+    echo '<div class="controls-left">';
+    echo '<a href="' . $base_url . '?q=admin/config/os2web/esdh_provider" class="form-submit">Import form</a>';
+    echo '</div>';
+  }
+}
+
 function os2dagsorden_meeting_views_meeting_description_download(){
  global $base_url;
   $q = explode('/',$_GET['q']);
