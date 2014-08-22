@@ -355,6 +355,22 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#description' => t('This decides whether the will be added a prefix to Bilag or Case bullet point attachment on import.<br/>e.g. <b>Bilag:</b> Indsigelser of Bemaerkninger.'),
     '#default_value' => variable_get('os2dagsorden_add_type_prefix', 'true'),
   );
+  $form['os2dagsorden_meeting_import']['os2dagsorden_committee_category_pol'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Political committees'),
+    '#maxlength' => 250,
+    '#default_value' => variable_get('os2dagsorden_committee_category_pol', FALSE),
+    '#description' => t('Comma-separated list of committees meetings of which should be tagged as POLITICAL during the import.'),
+  );
+  $form['os2dagsorden_meeting_import']['os2dagsorden_committee_category_org'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Organisational committees'),
+    '#maxlength' => 250,
+    '#default_value' => variable_get('os2dagsorden_committee_category_org', FALSE),
+    '#description' => t('Comma-separated list of committees meetings of which should be tagged as ORGANISATIONAL during the import.'),
+  );
+
+  //PDF conversion settings
   if (module_exists('os2web_pdf_conversion_manager')) {
     $form['os2dagsorden_file_import'] = array(
       '#type' => 'fieldset',

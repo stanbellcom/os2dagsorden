@@ -67,6 +67,13 @@ function os2dagsorden_admin_suite_menu() {
         'page callback' => 'os2dagsorden_admin_suite_update_meetings_sysid',
         'access arguments' => array('administer os2web'),
     );
+
+    $items['os2dagsorden/check_meeting_category_assignment/%/%'] = array(
+        'type' => MENU_CALLBACK,
+        'page callback' => 'os2dagsorden_esdh_provider_assign_meeting_category',
+        'access arguments' => array('administer os2web'),
+	'page arguments' => array(2,3),
+    );
     
     
     return $items;

@@ -212,3 +212,22 @@ function os2dagsorden_esdh_provider_handle_additional_meeting($node, $agenda_nam
 function os2dagsorden_esdh_provider_import_closed_attachment () {
     return TRUE;
 }
+
+/**
+ * Assigned meeting's category based on the list of committees provided in the settings
+ *
+ * @param $node
+ * @param $committee_subid
+ * @return mixed
+ */
+function os2dagsorden_esdh_provider_assign_meeting_category($node, $committee_subid){
+  $pol_committees = array_map('trim', explode(',', variable_get('os2dagsorden_committee_category_pol', '')));
+  if (in_array($committee_subid, $pol_committees))
+    $node->field_os2web_meetings_category[LANGUAGE_NONE][0]['value'] = 'pol';
+
+  $org_committees = array_map('trim', explode(',', variable_get('os2dagsorden_committee_category_org', '')));
+  if (in_array($committee_subid, $org_committees))
+    $node->field_os2web_meetings_category[LANGUAGE_NONE][0]['value'] = 'org';
+
+  return $node;
+}
