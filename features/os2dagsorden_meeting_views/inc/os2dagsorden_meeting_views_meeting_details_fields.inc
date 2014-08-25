@@ -252,12 +252,14 @@ function os2dagsorden_meeting_views_meeting_details_fields_bullet_point_title($t
     if (mb_strlen($title) > 70)
       $title = mb_substr($title, 0, 67) . '...';
   } else {//desktop device
-    if (mb_strlen($title) > 95)
+    if (mb_strlen($title) > 95) {
+      $tooltip = ' title="' . $title . '"';
       $title = mb_substr($title, 0, 92) . '...';
+    }
   }
 
   if (os2dagsorden_access_helper_check_user_can_see_bullet_point($meeting_id, $bp_id))
-    print '<a href="' . $base_url . '/meeting/' . $meeting_id . '/bullet-point/' . $bp_id . '" class="first-child">' . $title . '</a>';
+    print '<a href="' . $base_url . '/meeting/' . $meeting_id . '/bullet-point/' . $bp_id . '" class="first-child poshy_tip"' . $tooltip . '>' . $title . '</a>';
   else 
     print '<a class="first-child">' . $title . '</a>';
 }

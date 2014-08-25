@@ -2269,20 +2269,6 @@ os2dagsorden_meeting_views_meetings_search_fields_meeting_has_notes($row->nid);
 ?>';
   $handler->display->display_options['fields']['php']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php']['php_click_sortable'] = '';
-  /* Felt: Status */
-  $handler->display->display_options['fields']['php_7']['id'] = 'php_7';
-  $handler->display->display_options['fields']['php_7']['table'] = 'views';
-  $handler->display->display_options['fields']['php_7']['field'] = 'php';
-  $handler->display->display_options['fields']['php_7']['ui_name'] = 'Status';
-  $handler->display->display_options['fields']['php_7']['label'] = 'Status';
-  $handler->display->display_options['fields']['php_7']['alter']['make_link'] = TRUE;
-  $handler->display->display_options['fields']['php_7']['alter']['path'] = 'meeting/[nid][php_4][php_5]';
-  $handler->display->display_options['fields']['php_7']['use_php_setup'] = 0;
-  $handler->display->display_options['fields']['php_7']['php_output'] = '<?php
- os2dagsorden_meeting_views_meetings_search_fields_status($row->nid);
-?>';
-  $handler->display->display_options['fields']['php_7']['use_php_click_sortable'] = '0';
-  $handler->display->display_options['fields']['php_7']['php_click_sortable'] = '';
   /* Felt: title - php */
   $handler->display->display_options['fields']['php_2']['id'] = 'php_2';
   $handler->display->display_options['fields']['php_2']['table'] = 'views';
@@ -2298,6 +2284,20 @@ os2dagsorden_meeting_views_meetings_search_fields_meeting_title($data);
 ?>';
   $handler->display->display_options['fields']['php_2']['use_php_click_sortable'] = '0';
   $handler->display->display_options['fields']['php_2']['php_click_sortable'] = '';
+  /* Felt: Status */
+  $handler->display->display_options['fields']['php_7']['id'] = 'php_7';
+  $handler->display->display_options['fields']['php_7']['table'] = 'views';
+  $handler->display->display_options['fields']['php_7']['field'] = 'php';
+  $handler->display->display_options['fields']['php_7']['ui_name'] = 'Status';
+  $handler->display->display_options['fields']['php_7']['label'] = 'Status';
+  $handler->display->display_options['fields']['php_7']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['php_7']['alter']['path'] = 'meeting/[nid][php_4][php_5]';
+  $handler->display->display_options['fields']['php_7']['use_php_setup'] = 0;
+  $handler->display->display_options['fields']['php_7']['php_output'] = '<?php
+ os2dagsorden_meeting_views_meetings_search_fields_status($row->nid);
+?>';
+  $handler->display->display_options['fields']['php_7']['use_php_click_sortable'] = '0';
+  $handler->display->display_options['fields']['php_7']['php_click_sortable'] = '';
   /* Felt: Indhold: Date */
   $handler->display->display_options['fields']['field_os2web_meetings_date']['id'] = 'field_os2web_meetings_date';
   $handler->display->display_options['fields']['field_os2web_meetings_date']['table'] = 'field_data_field_os2web_meetings_date';
