@@ -105,6 +105,20 @@ function os2dagsorden_settings_settings_form($form, $form_state) {
     '#description' => 'Comma-separated list of committees ID which agenda and the summary (samlet dokument) is hidden to those without the rights',
     '#default_value' => variable_get('os2dagsorden_hidden_agenda_committee', OS2DAGSORDEN_HIDDEN_AGENGA_COMMITTEE),
   );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_meeting_description_download_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Meeting description download button'),
+    '#maxlength' => 200,
+    '#description' => t('Title of the meeting description download button'),
+    '#default_value' => variable_get('os2dagsorden_meeting_description_download_title', 'Hent samlet dokument i PDF'),
+  );
+  $form['os2dagsorden_meeting_view_settings']['os2dagsorden_meeting_description_download_title_additional'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Meeting additional description download button'),
+    '#maxlength' => 200,
+    '#description' => t('Title of the meeting additional description download button'),
+    '#default_value' => variable_get('os2dagsorden_meeting_description_download_title_additional', 'Hent tillægsdokument i PDF'),
+  );
     
   //expand or not expand bilag on bullet point expand
   //Meetig view settings
