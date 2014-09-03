@@ -739,3 +739,26 @@ function _os2dagsorden_annotator_append_note($note, $index, $print_text = false,
     }
     return $to_return;
 }
+
+/**
+ * Implements hook_node_delete().
+ *
+ * Deletes the associated notes, when deleting the content.
+ */
+function os2dagsorden_annotator_node_delete($node){
+    if ($node->type === 'os2web_meetings_meeting') {
+	  db_delete('os2dagsorden_annotator_notes')
+      ->condition('meeting_id', $node->nid, '=')
+      ->execute();
+    }
+    if ($node->type === 'os2web_meetings_bullet') {
+      db_delete('os2dagsorden_annotator_notes')
+      ->condition('bullet_point_id', $node->nid, '=')
+      ->execute();
+    }
+    if ($node->type === 'os2web_meetings_bullet_attach') {
+      db_delete('os2dagsorden_annotator_notes')
+      ->condition('bilag_id', $node->nid, '=')
+      ->execute();
+    }
+}

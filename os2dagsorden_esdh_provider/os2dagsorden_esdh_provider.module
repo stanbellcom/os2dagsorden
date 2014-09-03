@@ -231,3 +231,42 @@ function os2dagsorden_esdh_provider_assign_meeting_category($node, $committee_su
 
   return $node;
 }
+
+/**
+ * Returns the corresponding bullet if exists, bases on the name
+ *
+ * @param $title
+ * @param $bullet_nids
+ * @return mixed
+ */
+function os2dagsorden_esdh_provider_find_corresponding_bullet($title, $bullet_nids){
+  foreach($bullet_nids as $bullet_nid){
+    $bullet = node_load($bullet_nid['target_id']);
+    if (strcasecmp($title, $bullet->title) == 0){
+      return $bullet;
+    }
+  }
+  return NULL;
+}
+
+/**
+ * Returns the corresponding attachment if exists, bases on the name and content
+ *
+ * @param $bullet_entity
+ * @param $attachment_nids
+ * @return mixed
+ */
+function os2dagsorden_esdh_provider_find_corresponding_attachment($bullet_entity, $attachment_nids){
+  err_debug('=====here');
+  foreach($attachment_nids as $attachment_nid){
+    err_debug('=====Starting to compare');
+    $attachment = node_load($attachment_nid['target_id']);
+    err_debug('=======Comparing ' . $attachment->title . '[' . $attachment->nid . '] vs ' . $bullet_entity['title'] . ' result: ');
+    if (strcasecmp($bullet_entity['title'], $attachment->title) == 0
+      && strcasecmp($bullet['body'], $attachment->field_os2web_meetings_bpa_body[$node->language][0]['value']) == 0){
+      err_debug('Match');
+      return $attachment;
+    }
+  }
+  return NULL;
+}
